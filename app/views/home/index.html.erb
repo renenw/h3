@@ -1,0 +1,15 @@
+<h1>General Stuff</h1>
+
+<%= link_to "Login", login_path %> | <%= link_to "Dashboard", dashboard_index_path %>
+
+<h1>API: Out</h1>
+
+<table>
+  <tr><td>/api/:data_store/sources</td><td>list sources</td></tr>
+  <tr><td>/api/:data_store/readings</td><td>show the most recent reading / state for each source</td></tr>
+  <tr><td>/api/:data_store/:source/reading</td><td>for a single sensor, show the current state</td></tr>
+  <tr><td>/api/:data_store/:source/readings</td><td>show the most recent readings (50 or n <= 200) for a sensor</td></tr>
+  <tr><td>/api/:data_store/:source/:dimension</td><td>retrieve the last 50 (or n <= 200) summarised data points for a sensor, for a dimension</td></tr>
+  <tr><td>/api/:data_store/:source/:dimension/summary</td><td>get the most recent summary value for a sensor, for a dimension</td></tr>
+  <tr><td>/api/:data_store/:dimension</td><td>&nbsp;</td></tr>
+</table>
