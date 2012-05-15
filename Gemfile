@@ -25,3 +25,5 @@ group :test do
 end
 
 gem 'dalli'
+
+gem 'less-rails-bootstrap', '~> 2.0'

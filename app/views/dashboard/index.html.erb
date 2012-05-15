@@ -1,21 +1,29 @@
 <div id="Dashboard">
 
-  <h1>Most Recent Readings</h1>
+  <div class="page-header">
+    <h1>Most Recent Readings</h1>
+  </div>
 
   <div id="sensors">
     <div class="sensor" id="sensor_template" style="display:none;"><span class="time"></span><span class="source"></span><span class="reading"></span></div>
   </div>
 
-  <h1>Graphs</h1>
+  <div class="page-header">
+    <h1>Graphs</h1>
+  </div>
 
   <div id="graphs">
     <div class="graph" id="graph_template" style="display:none; clear:both;">
-      <h2>temperature_outside</h2>
-      <div>
-        <div class="graph_container _5minute" style="width: 300px; height: 200px; float:left;"></div>
-        <div class="graph_container _hour" style="width: 300px; height: 200px; float:left;"></div>
-        <div class="graph_container _day" style="width: 300px; height: 200px; float:left;"></div>
-        <div class="graph_container _week" style="width: 300px; height: 200px; float:left;"></div>
+      <div class="row">
+        <div class="span12">
+          <h2>temperature_outside</h2>
+          <div>
+            <div class="graph_container _5minute" style="width: 300px; height: 200px; float:left;"></div>
+            <div class="graph_container _hour" style="width: 300px; height: 200px; float:left;"></div>
+            <div class="graph_container _day" style="width: 300px; height: 200px; float:left;"></div>
+            <div class="graph_container _week" style="width: 300px; height: 200px; float:left;"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
