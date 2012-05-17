@@ -26,7 +26,7 @@
   }
 
   function populate_graph_template(template, index, value) {
-    template.children('h2').html(index);
+    template.find('h2').html(index);
     charts['5minute.' + index] = instantiate_chart(template, '5minute', index);
     charts['hour.' + index] = instantiate_chart(template, 'hour', index);
     charts['day.' + index] = instantiate_chart(template, 'day', index);
