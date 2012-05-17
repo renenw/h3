@@ -31,7 +31,7 @@
     charts['hour.' + index] = instantiate_chart(template, 'hour', index);
     charts['day.' + index] = instantiate_chart(template, 'day', index);
     charts['week.' + index] = instantiate_chart(template, 'week', index); 
-   return template;
+    return template;
   }
 
   function instantiate_chart(template, dimension, source) {
@@ -40,10 +40,9 @@
   }
 
   function populate_sensor_template(template, index, value) {
-    t = new Date(value['local_time']);
     template.children('.source').html(index);
     template.children('.reading').html( value['reading'] );
-    template.children('.time').html( t.getUTCHours() + ":" + t.getUTCMinutes() );
+    template.children('.time').html( (new Date(value['local_time'])).format("shortTime") );
     return template;
   }
 
