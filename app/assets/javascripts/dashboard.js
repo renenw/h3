@@ -5,9 +5,11 @@
   var charts = {};
 
   Dashboard.init = function(readings, history) {
+    $("#graphs-loaded").html((new Date()).format());
     populate_template("sensor", readings, populate_sensor_template);
     populate_template("graph", readings, populate_graph_template);
     poll();
+    monitor();
   }
 
   function populate_template(singular_element_name, data_hash, templater) {
@@ -42,8 +44,23 @@
   function populate_sensor_template(template, index, value) {
     template.children('.source').html(index);
     template.children('.reading').html( value['reading'] );
-    template.children('.time').html( (new Date(value['local_time'])).format("shortTime") );
+    template.find('.time').html( (new Date(value['local_time'])).format("shortTime",true) ).data('expires', value['expires']);
     return template;
+  }
+
+  function monitor() {
+    t = (new Date()).getTime();
+    $('.expires').each(function(index, e) {
+      expires = $(e).data('expires');
+      if (expires) {
+        if (expires < t) {
+          $(e).addClass('label label-important');
+        } else {
+          $(e).removeClass('label label-important');
+        }
+      }
+    });
+    setTimeout(monitor, 2000);
   }
 
   function poll() {
@@ -52,6 +69,9 @@
       dataType: 'json', 
       success: function(data) {
         populate_template('sensor', data, populate_sensor_template);
+        e = $('#last_poll_time');
+        e.html((new Date()).format());
+        e.data('expires', (new Date()).getTime() + (60*1000) );
       },
       complete: function() {
         setTimeout(poll, 15000);

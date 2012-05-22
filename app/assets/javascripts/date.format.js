@@ -93,16 +93,16 @@ var dateFormat = function () {
 
 // Some common format strings
 dateFormat.masks = {
-	"default":      "UTC:ddd mmm dd yyyy HH:MM:ss",
-	shortDate:      "UTC:m/d/yy",
-	mediumDate:     "UTC:mmm d, yyyy",
-	longDate:       "UTC:mmmm d, yyyy",
-	fullDate:       "UTC:dddd, mmmm d, yyyy",
-	shortTime:      "UTC:h:MM TT",
-	mediumTime:     "UTC:h:MM:ss TT",
-	longTime:       "UTC:h:MM:ss TT Z",
-	isoDate:        "UTC:yyyy-mm-dd",
-	isoTime:        "UTC:HH:MM:ss",
+	"default":      "ddd mmm dd yyyy HH:MM:ss",
+	shortDate:      "m/d/yy",
+	mediumDate:     "mmm d, yyyy",
+	longDate:       "mmmm d, yyyy",
+	fullDate:       "dddd, mmmm d, yyyy",
+	shortTime:      "h:MM TT",
+	mediumTime:     "h:MM:ss TT",
+	longTime:       "h:MM:ss TT Z",
+	isoDate:        "yyyy-mm-dd",
+	isoTime:        "HH:MM:ss",
 	isoDateTime:    "yyyy-mm-dd'T'HH:MM:ss",
 	isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
 };

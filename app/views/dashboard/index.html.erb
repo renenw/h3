@@ -14,15 +14,17 @@
     </thead>
     <tbody>
       <tr class="sensor" id="sensor_template" style="display:none;">
-        <td class="time"></td>
+        <td><span class="time expires"></span></td>
         <td class="source"></td>
         <td class="reading"></td>
       </tr>
     </tbody>
   </table>
 
+  <div>Last polled: <span id='last_poll_time' class="expires"></span></div>
+
   <div class="page-header">
-    <h1>Graphs</h1>
+    <h1>Graphs <small>at <span id="graphs-loaded"></span></small></h1>
   </div>
 
   <div id="graphs">
