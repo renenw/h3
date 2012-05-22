@@ -13,8 +13,9 @@ Infinity = 1.0/0
 @mysql = Mysql2::Client.new(:host => "localhost", :username => "root", :database => "30_camp_ground_road")
 @cache = Dalli::Client.new('localhost:11211')
 
-CACHED_HISTORY_ITEMS = 200
-OUTLIER_ITEMS        = 200
+CACHED_HISTORY_ITEMS   = 200
+OUTLIER_ITEMS          = 200
+PAYLOAD_HISTORY_ITEMS  = 500
 
 RABBIT_HOST     = '127.0.0.1'
 RABBIT_PASSWORD = '2PvvWRzgrivs'
@@ -192,7 +193,9 @@ end
 
 def handle_reading(message)
   payload = JSON.parse(message)
-  if reading_reasonable(payload)
+  reasonable = reading_reasonable(payload)
+  sql_error = nil
+  if reasonable
     t = payload['dimensions']
     begin
       @mysql.query "insert into #{payload['data_store']}.readings (source, local_time, reading, year, month, week, day, hour, 5minute, 10minute, 15minute, 30minute, yday) values ('#{payload['source']}', #{payload['local_time']}, #{payload['converted_value']}, #{t['year']}, #{t['month']}, #{t['week']}, #{t['day']}, #{t['hour']}, #{t['5minute']}, #{t['10minute']}, #{t['15minute']}, #{t['30minute']}, #{t['yday']})"
@@ -201,10 +204,20 @@ def handle_reading(message)
       p "Insert failed"
       p "#{payload}"
       p "#{$!}"
+      sql_error = $!
     end
   else
     @mysql.query "insert into #{payload['data_store']}.outliers (event_id) values (#{payload['event_id']})"
   end
+  n = @cache.incr("#{payload['data_store']}.reading_log", 1, nil, 0)
+  @cache.set("#{payload['data_store']}.reading_log.#{ n % PAYLOAD_HISTORY_ITEMS }", {
+                                                                                       'local_time' => payload['local_time']*1000,
+                                                                                       'reading' => payload['converted_value'],
+                                                                                       'source' => payload['source'],
+                                                                                       'payload' => payload,
+                                                                                       'outlier' => reasonable,
+                                                                                       'sql_error' => sql_error,
+                                                                                     })
 end
 
 def handle_cache_reading(message)
