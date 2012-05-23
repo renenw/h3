@@ -1,0 +1,18 @@
+<tr class="reading">
+  <td><span class="time"><%= reading['local_time'] %></span></td>
+  <td class="source">
+    <%= reading['source'] %><br/>
+    <% if reading['outlier'] %>
+      <span class="label label-warning">Outlier</span>&nbsp;
+    <% end %>
+    <% if reading['sql_error'] %>
+      <span class="label label-important">sql</span>
+    <% end %>
+  </td>
+  <td class="reading">
+    <%= reading['payload'] %>
+    <% if reading['sql_error']  %>
+      <br/><br/><b><%= reading['sql_error'] %></b>
+    <% end %>
+  </td>
+</tr>

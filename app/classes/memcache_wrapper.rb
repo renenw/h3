@@ -2,6 +2,8 @@ class MemcacheWrapper
 
   include Singleton
 
+  PAYLOAD_HISTORY_ITEMS = 500
+
   def get_sources
     memcache_connector.get("monitors")
   end
@@ -39,10 +41,15 @@ class MemcacheWrapper
     end
   end
 
+  def get_readings_log(params)
+    memcache_connector.array_get("#{params['data_store']}.reading_log", PAYLOAD_HISTORY_ITEMS)
+  end
+
   protected
 
     def memcache_connector
-      @cache ||= Dalli::Client.new('localhost:11211')
+      #@cache ||= Dalli::Client.new('localhost:11211')
+      @cache ||= Cacher.new('localhost:11211')
       @cache
     end
 

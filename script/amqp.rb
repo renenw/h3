@@ -5,13 +5,15 @@ require "amqp"
 require 'json'
 require 'mysql2'
 require 'tzinfo'
-require 'dalli'
+#require 'dalli'
+require './cacher'
 require 'pp'
 
 Infinity = 1.0/0
 
 @mysql = Mysql2::Client.new(:host => "localhost", :username => "root", :database => "30_camp_ground_road")
-@cache = Dalli::Client.new('localhost:11211')
+#@cache = Dalli::Client.new('localhost:11211')
+@cache = Cacher.new('localhost:11211')
 
 CACHED_HISTORY_ITEMS   = 200
 OUTLIER_ITEMS          = 200
@@ -209,15 +211,16 @@ def handle_reading(message)
   else
     @mysql.query "insert into #{payload['data_store']}.outliers (event_id) values (#{payload['event_id']})"
   end
-  n = @cache.incr("#{payload['data_store']}.reading_log", 1, nil, 0)
-  @cache.set("#{payload['data_store']}.reading_log.#{ n % PAYLOAD_HISTORY_ITEMS }", {
+  #n = @cache.incr("#{payload['data_store']}.reading_log", 1, nil, 0)
+  #@cache.set("#{payload['data_store']}.reading_log.#{ n % PAYLOAD_HISTORY_ITEMS }", {
+  @cache.array_append("#{payload['data_store']}.reading_log", {
                                                                                        'local_time' => payload['local_time']*1000,
                                                                                        'reading' => payload['converted_value'],
                                                                                        'source' => payload['source'],
                                                                                        'payload' => payload,
-                                                                                       'outlier' => reasonable,
+                                                                                       'outlier' => !reasonable,
                                                                                        'sql_error' => sql_error,
-                                                                                     })
+                                                                                     }, PAYLOAD_HISTORY_ITEMS)
 end
 
 def handle_cache_reading(message)
