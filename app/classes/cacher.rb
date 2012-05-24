@@ -32,22 +32,22 @@ class Cacher
     @master.get_multi(keys)
   end
 
-  def array_get(key)
+  def array_get(key, limit = nil)
     result = []
-    tail = []
-    size = @master.get("#{key}.size").to_i
-    n = @master.get(key)
-    if n
+    size = @master.get("#{key}.size")
+    if size
+      n = @master.get(key).to_i
+      limit = size unless limit
       keys = []
-      size.times do |i|
-        keys << "#{key}.#{i}"
+      limit.to_i.times do |i|
+        keys << "#{key}.#{n % size}"
+        n = n - 1
       end
       @master.get_multi(keys).map do |k,v|
         result << v
       end
-      tail = result.shift(n.to_i%size)
     end
-    result + tail
+    result
   end
 
 end

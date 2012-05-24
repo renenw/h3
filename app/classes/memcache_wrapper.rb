@@ -40,7 +40,7 @@ class MemcacheWrapper
   end
 
   def get_array(array_name, params)
-    memcache_connector.array_get("#{params['data_store']}.#{array_name}")
+    memcache_connector.array_get("#{params['data_store']}.#{array_name}", params['n'])
   end
 
   protected

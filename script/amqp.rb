@@ -5,19 +5,18 @@ require "amqp"
 require 'json'
 require 'mysql2'
 require 'tzinfo'
-#require 'dalli'
 require './cacher'
 require 'pp'
 
 Infinity = 1.0/0
 
 @mysql = Mysql2::Client.new(:host => "localhost", :username => "root", :database => "30_camp_ground_road")
-#@cache = Dalli::Client.new('localhost:11211')
 @cache = Cacher.new('localhost:11211')
 
-CACHED_HISTORY_ITEMS   = 200
-OUTLIER_ITEMS          = 200
-PAYLOAD_HISTORY_ITEMS  = 500
+CACHED_HISTORY_ITEMS      = 200
+OUTLIER_ITEMS             = 200
+PAYLOAD_HISTORY_ITEMS     = 500
+ANOMOLOUS_READING_HISTORY = 200
 
 RABBIT_HOST     = '127.0.0.1'
 RABBIT_PASSWORD = '2PvvWRzgrivs'
@@ -221,6 +220,18 @@ def handle_reading(message)
                                                                                        'outlier' => !reasonable,
                                                                                        'sql_error' => sql_error,
                                                                                      }, PAYLOAD_HISTORY_ITEMS)
+
+  if (sql_error || !reasonable)
+    @cache.array_append("#{payload['data_store']}.anomoly_log", {
+                                                                                         'local_time' => payload['local_time']*1000,
+                                                                                         'reading' => payload['converted_value'],
+                                                                                         'source' => payload['source'],
+                                                                                         'payload' => payload,
+                                                                                         'outlier' => !reasonable,
+                                                                                         'sql_error' => sql_error,
+                                                                                       }, ANOMOLOUS_READING_HISTORY)
+  end
+
 end
 
 def handle_cache_reading(message)

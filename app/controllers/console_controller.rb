@@ -4,8 +4,13 @@ class ConsoleController < ApplicationController
   end
 
   def readings
-    @readings = memcache.get_array('reading_log', params).reverse
-    @readings = @readings.first(params['n'].to_i) if params['n']
+    target = 'reading_log'
+    @heading = 'Recent Readings'
+    if params['type'] == 'anomalies'
+      target = 'anomoly_log'
+      @heading = 'Anomalies'
+    end
+    @readings = memcache.get_array(target, params)
   end
 
 end

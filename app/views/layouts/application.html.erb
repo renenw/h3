@@ -21,7 +21,14 @@
             <ul class="nav">
               <li class="active"><%= link_to "Home", root_path %></a></li>
               <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Console <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "Overview", console_index_path %></li>
+                  <li><%= link_to "Recent Readings", console_readings_path(:n=>"50") %></li>
+                  <li><a href="/console/anomalies?n=50">Anomalies</a></li>
+                </ul>
+              </li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>

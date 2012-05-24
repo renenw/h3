@@ -2,6 +2,7 @@ H3::Application.routes.draw do
 
   get "console/index"
   get "console/readings"
+  match 'console/:type' => 'console#readings'
   get "home/index"
 
   root :to => "home#index"
