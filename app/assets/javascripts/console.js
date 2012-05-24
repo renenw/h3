@@ -1,10 +1,10 @@
 (function() {
 
-  window.Dashboard || (window.Dashboard = {});
+  window.Console || (window.Console = {});
 
   var charts = {};
 
-  Dashboard.init = function(readings, history) {
+  Console.init = function(readings, history) {
     $("#graphs-loaded").html((new Date()).format());
     populate_template("sensor", readings, populate_sensor_template);
     populate_template("graph", readings, populate_graph_template);

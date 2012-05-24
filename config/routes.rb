@@ -1,7 +1,7 @@
 H3::Application.routes.draw do
 
-  get "dashboard/index"
-  get "dashboard/readings"
+  get "console/index"
+  get "console/readings"
   get "home/index"
 
   root :to => "home#index"

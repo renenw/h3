@@ -1,4 +1,4 @@
-<div id="Dashboard">
+<div id="Console">
 
   <div class="page-header">
     <h1>Most Recent Readings</h1>
@@ -46,7 +46,7 @@
 </div> 
 
 <% content_for :js_init do %>
-  Dashboard.init(readings, my_history);
+  Console.init(readings, my_history);
 <% end %>
 
 <% content_for :js_end do %>

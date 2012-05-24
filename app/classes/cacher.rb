@@ -25,15 +25,17 @@ class Cacher
   def array_append(key, value, size)
     n = @master.incr(key, 1, nil, 0)
     @master.set("#{key}.#{ n % size }", value)
+    @master.set("#{key}.size", size)
   end
 
   def get_multi(*keys)
     @master.get_multi(keys)
   end
 
-  def array_get(key, size)
+  def array_get(key)
     result = []
     tail = []
+    size = @master.get("#{key}.size").to_i
     n = @master.get(key)
     if n
       keys = []
