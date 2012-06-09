@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
       @current_user ||= User.find(session[:user_id]) if session[:user_id]
     end
 
+    def sources
+      @sources ||= memcache.get_sources
+    end
+
     def session_logged_in?
       !session[:user_id].nil?
     end
@@ -25,5 +29,6 @@ class ApplicationController < ActionController::Base
     helper_method :session_logged_in?
     helper_method :session_data_store
     helper_method :memcache
+    helper_method :sources
 
 end

@@ -40,6 +40,7 @@ MONITORS = {
   'bandwidth_out'       => { :monitor_type => :pulse, :range => { :min => 0, :max => Infinity}, :expected_frequency => 60 },
   'bandwidth_total'     => { :monitor_type => :pulse, :range => { :min => 0, :max => Infinity}, :expected_frequency => 60 },
   'outlier'             => { :monitor_type => :counter },
+  'a0'                  => { :monitor_type => :counter, :name => 'Pool Monitor' }
 }
 
 module UmmpServer
@@ -143,16 +144,25 @@ end
 def handle_udp(message)
   payload = JSON.parse(message)
   data = payload['packet'].scan(/[\w\.]+/)
-  source_type = MONITORS[data[0]][:monitor_type]
-  next_handler = 'initialise_structured_message'
-  if source_type
-    next_handler = 'handle_mrtg_pre_processing' if source_type == :mrtg
-    @exchange.publish payload.merge(
-                                    { 'data_store' => '30_camp_ground_road',
-                                      'source' => data[0],
-                                      'source_type' => source_type.to_s
-                                     }
-                                 ).to_json, :routing_key => next_handler
+  if data && data[0] && MONITORS[data[0]]
+    source_type = MONITORS[data[0]][:monitor_type]
+    next_handler = 'initialise_structured_message'
+    if source_type
+      next_handler = 'handle_mrtg_pre_processing' if source_type == :mrtg
+      @exchange.publish payload.merge(
+                                      { 'data_store' => '30_camp_ground_road',
+                                        'source' => data[0],
+                                        'source_type' => source_type.to_s
+                                       }
+                                   ).to_json, :routing_key => next_handler
+    end
+  else
+    recent_reading = {
+                       'local_time' => get_local_time(SETTINGS['timezone'], Time.at(payload['received'].to_f)).to_f*1000,
+                       'Unknown' => true,
+                       'payload' => payload,
+                     }
+    @cache.array_append("30_camp_ground_road.anomoly_log", recent_reading, PAYLOAD_HISTORY_ITEMS)
   end
 end
 
@@ -202,34 +212,24 @@ def handle_reading(message)
       @mysql.query "insert into #{payload['data_store']}.readings (source, local_time, reading, year, month, week, day, hour, 5minute, 10minute, 15minute, 30minute, yday) values ('#{payload['source']}', #{payload['local_time']}, #{payload['converted_value']}, #{t['year']}, #{t['month']}, #{t['week']}, #{t['day']}, #{t['hour']}, #{t['5minute']}, #{t['10minute']}, #{t['15minute']}, #{t['30minute']}, #{t['yday']})"
       @process_exchange.publish message
     rescue #should only really be catching the error on the sql
-      p "Insert failed"
-      p "#{payload}"
-      p "#{$!}"
       sql_error = $!
     end
   else
     @mysql.query "insert into #{payload['data_store']}.outliers (event_id) values (#{payload['event_id']})"
   end
-  #n = @cache.incr("#{payload['data_store']}.reading_log", 1, nil, 0)
-  #@cache.set("#{payload['data_store']}.reading_log.#{ n % PAYLOAD_HISTORY_ITEMS }", {
-  @cache.array_append("#{payload['data_store']}.reading_log", {
-                                                                                       'local_time' => payload['local_time']*1000,
-                                                                                       'reading' => payload['converted_value'],
-                                                                                       'source' => payload['source'],
-                                                                                       'payload' => payload,
-                                                                                       'outlier' => !reasonable,
-                                                                                       'sql_error' => sql_error,
-                                                                                     }, PAYLOAD_HISTORY_ITEMS)
+
+  recent_reading = {
+                     'local_time' => payload['local_time']*1000,
+                     'reading' => payload['converted_value'],
+                     'source' => payload['source'],
+                     'payload' => payload.select { |k, v| k!='dimensions'  },
+                     'outlier' => !reasonable,
+                     'sql_error' => sql_error,
+                   }
+  @cache.array_append("#{payload['data_store']}.reading_log", recent_reading, PAYLOAD_HISTORY_ITEMS)
 
   if (sql_error || !reasonable)
-    @cache.array_append("#{payload['data_store']}.anomoly_log", {
-                                                                                         'local_time' => payload['local_time']*1000,
-                                                                                         'reading' => payload['converted_value'],
-                                                                                         'source' => payload['source'],
-                                                                                         'payload' => payload,
-                                                                                         'outlier' => !reasonable,
-                                                                                         'sql_error' => sql_error,
-                                                                                       }, ANOMOLOUS_READING_HISTORY)
+    @cache.array_append("#{payload['data_store']}.anomoly_log", recent_reading, ANOMOLOUS_READING_HISTORY)
   end
 
 end
@@ -547,7 +547,6 @@ def reading_reasonable(payload)
       @exchange.publish outlier_message, :routing_key => 'udp_handler'
     end
   end
-  p "Outlier / rejection: #{payload['source']}" unless reasonable
   reasonable
 end
 

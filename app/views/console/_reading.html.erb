@@ -8,6 +8,9 @@
     <% if reading['sql_error'] %>
       <span class="label label-important">sql</span>
     <% end %>
+    <% if reading['Unknown'] %>
+      <span class="label label-important">Unknown Sensor</span>
+    <% end %>
   </td>
   <td class="reading">
     <%= reading['payload'] %>

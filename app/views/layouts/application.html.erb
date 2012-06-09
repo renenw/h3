@@ -17,19 +17,59 @@
             <span class="icon-bar"></span>
           </a>
           <%= link_to "The Watermeyers", root_path, :class => 'brand' %>
+
           <div class="nav-collapse">
             <ul class="nav">
-              <li class="active"><%= link_to "Home", root_path %></a></li>
-              <li><a href="#about">About</a></li>
+
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Analysis <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to 'Temperature', console_index_path %></li>
+                  <li><%= link_to 'Electricity', console_index_path %></li>
+                  <li><%= link_to 'Bandwidth', console_index_path %></li>
+                </ul>
+              </li>
+
+             <li class="dropdown active">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Switches <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to 'Alarm', console_index_path %></li>
+                </ul>
+              </li>
+
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Gauges <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <% sources.each do |key, value| %>
+                    <% if value[:monitor_type]==:gauge  %>
+                      <li><%= link_to key.gsub(/_/, ' ').capitalize, console_index_path %></li> 
+                    <% end %>
+                  <% end  %>
+                </ul>
+              </li>
+
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Meters <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <% sources.each do |key, value| %>
+                    <% if value[:monitor_type]==:pulse %>
+                      <li><%= link_to key.gsub(/_/, ' ').capitalize, console_index_path %></li>
+                    <% end %>
+                  <% end  %>
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav pull-right">
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Console <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><%= link_to "Overview", console_index_path %></li>
-                  <li><%= link_to "Recent Readings", console_readings_path(:n=>"50") %></li>
+                  <li><%= link_to "Recent readings", console_readings_path(:n=>"50") %></li>
                   <li><a href="/console/anomalies?n=50">Anomalies</a></li>
                 </ul>
               </li>
             </ul>
+
           </div><!--/.nav-collapse -->
         </div>
       </div>

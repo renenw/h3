@@ -50,7 +50,7 @@
 <% end %>
 
 <% content_for :js_end do %>
-  var sources = <%=raw(memcache.get_sources.to_json)%>
+  var sources = <%=raw(sources.to_json)%>
   var readings = <%=raw(memcache.get_readings(params).to_json)%>;
   var my_history = {
     _5minute: <%=raw(memcache.get_summaries(params.merge({'dimension'=>'5minute'})).to_json)%>,
