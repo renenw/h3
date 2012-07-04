@@ -6,29 +6,14 @@
 
   Console.overview = function(readings) {
     $("#graphs-loaded").html((new Date()).format());
-    populate_template("sensor", readings, populate_sensor_template);
+    Templater.populate_template("sensor", readings, populate_sensor_template);
     poll();
     monitor();
   }
 
   Console.graphs = function(readings) {
     $("#graphs-loaded").html((new Date()).format());
-    populate_template("graph", readings, populate_graph_template);
-  }
-
-  function populate_template(singular_element_name, data_hash, templater) {
-    target = $('#' + singular_element_name + 's');
-    $.each(data_hash, function(name, value) {
-      template = $('#' + '_' + singular_element_name + name);
-      existing = (template.length!=0);
-      if (!existing) {
-        template = $('#' + singular_element_name + '_template').clone().attr('id', '_' + singular_element_name + name);
-      }
-      template = templater(template, name, value);
-      if (!existing) {
-        template.appendTo(target).show();
-      } 
-   });
+    Templater.populate_template("graph", readings, populate_graph_template);
   }
 
   function populate_graph_template(template, index, value) {
@@ -42,7 +27,7 @@
 
   function instantiate_chart(template, dimension, source) {
     chart = new Mini_Chart(template.find('._' + dimension)[0], dimension);
-    chart.plot( ( sources[source]['monitor_type']=="gauge" ? get_gauge_series_set(dimension, source) : get_meter_series_set(dimension, source) ) );
+    chart.plot( ( sources[source]['monitor_type']=="gauge" ? Data.get_gauge_series_set(dimension, source) : Data.get_meter_series_set(dimension, source) ) );
   }
 
   function populate_sensor_template(template, index, value) {
@@ -72,7 +57,7 @@
       url: '/api/30_camp_ground_road/readings',
       dataType: 'json', 
       success: function(data) {
-        populate_template('sensor', data, populate_sensor_template);
+        Templater.populate_template('sensor', data, populate_sensor_template);
         e = $('#last_poll_time');
         e.html((new Date()).format());
         e.data('expires', (new Date()).getTime() + (60*1000) );
@@ -82,41 +67,6 @@
       }
     })
   };
-
-  function get_gauge_series_set(dimension, source) {
-    return [
-           {
-             name: 'max',
-             data: get_chart_data(dimension, source, 'max')
-           },
-           {
-             name: 'average',
-             data: get_chart_data(dimension, source, 'avg')
-           },
-           {
-             name: 'min',
-             data: get_chart_data(dimension, source, 'min')
-           },
-         ];
-  }
-
-  function get_meter_series_set(dimension, source) {
-    return [
-           {
-             name: 'sum',
-             data: get_chart_data(dimension, source, 'sum')
-           },
-         ];
-  }
-
-  function get_chart_data(dimension, source, series) {
-    result = [];
-    $.each(my_history['_' + dimension][source], function(index, value) {
-      result.push([value['tag']*1000, value['values'][series]]);
-    })
-    return result;
-  };
-
 
 
 }).call(this); 
