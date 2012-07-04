@@ -1,0 +1,39 @@
+<div id="Console">
+
+  <div class="page-header">
+    <h1>Overview Graphs <small>at <span id="graphs-loaded"></span></small></h1>
+  </div>
+
+  <div id="graphs">
+    <div class="graph" id="graph_template" style="display:none; clear:both;">
+      <div class="row">
+        <div class="span12">
+          <h2>temperature_outside</h2>
+          <div>
+            <div class="graph_container _5minute" style="width: 235px; height: 145px; float:left;"></div>
+            <div class="graph_container _hour" style="width: 235px; height: 145px; float:left;"></div>
+            <div class="graph_container _day" style="width: 235px; height: 145px; float:left;"></div>
+            <div class="graph_container _week" style="width: 235px; height: 145px; float:left;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div> 
+
+<% content_for :js_init do %>
+  Console.graphs(readings);
+<% end %>
+
+<% content_for :js_end do %>
+  var sources = <%=raw(sources.to_json)%>
+  var readings = <%=raw(memcache.get_readings(params).to_json)%>;
+  var my_history = {
+    _5minute: <%=raw(memcache.get_summaries(params.merge({'dimension'=>'5minute'})).to_json)%>,
+    _hour: <%=raw(memcache.get_summaries(params.merge({'dimension'=>'hour'})).to_json)%>,
+    _day: <%=raw(memcache.get_summaries(params.merge({'dimension'=>'day'})).to_json)%>,
+    _week: <%=raw(memcache.get_summaries(params.merge({'dimension'=>'week'})).to_json)%>,
+    _month: <%=raw(memcache.get_summaries(params.merge({'dimension'=>'month'})).to_json)%>,
+  }
+<% end %>

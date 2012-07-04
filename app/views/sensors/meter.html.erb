@@ -1,0 +1,36 @@
+<div id="Gauge">
+
+  <div class="page-header">
+    <h1><%= sources[params[:source]][:name] %> <small>at <span class="time"><%= Time.now.to_i*1000 %></span> UTC</small></h1>
+  </div>
+
+  <div class="row">
+    <div class="span5">
+      <div class="hero-unit">
+        <h1><span class="format <%=params[:source]%>" data-format="#.0"></span><span class='sensor_suffix'></span></h1>
+      </div>
+    </div>
+    <div class="span7">
+      <h6>Hourly Highs and Lows</h6>
+      <div id="hourly_chart" class="graph_container _hour" style="background-color:pink; width: 530px; height: 145px; float:left;"></div>
+    </div>
+  </div>
+
+</div> 
+
+<% content_for :js_init do %>
+  Sensors.init('<%=params[:source]%>');
+<% end %>
+
+<% content_for :js_end do %>
+  var sensor = <%=raw(sources[params[:source]].to_json)%>
+  var reading = <%=raw(memcache.get_reading(params, params[:source]).to_json)%>
+  var sources = <%=raw(sources.to_json)%>
+  var my_history = {
+    _5minute: <%=raw(memcache.get_summaries(params.merge({'dimension'=>'5minute','n'=>20})).to_json)%>,
+    _hour: <%=raw(memcache.get_summaries(params.merge({'dimension'=>'hour','n'=>200})).to_json)%>,
+    _day: <%=raw(memcache.get_summaries(params.merge({'dimension'=>'day','n'=>200})).to_json)%>,
+    _week: <%=raw(memcache.get_summaries(params.merge({'dimension'=>'week','n'=>200})).to_json)%>,
+    _month: <%=raw(memcache.get_summaries(params.merge({'dimension'=>'month','n'=>200})).to_json)%>,
+  }
+<% end %>

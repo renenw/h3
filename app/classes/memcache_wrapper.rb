@@ -6,6 +6,10 @@ class MemcacheWrapper
     memcache_connector.get("monitors")
   end
 
+  def get_reading(params, sensor)
+    cache_get(params['data_store'], "reading.#{sensor}")
+  end
+
   def get_readings(params)
     get_from_cache(params) do |key|
       "reading.#{key}"

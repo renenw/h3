@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :add_data_store_to_params
 
-  private
+ private
 
     def add_data_store_to_params
       params['data_store'] = session[:data_store] unless params['data_store']

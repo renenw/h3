@@ -18,10 +18,3 @@
   </table>
 
 </div> 
-
-<% content_for :js_end do %>
-  $('.time').each(function(index, e) {
-    t = $(e);
-    t.html( (new Date(Number(t.html()))).format("ddd mmm dd yyyy HH:MM:ss", true) );
-  });
-<% end %>

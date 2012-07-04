@@ -1,19 +1,17 @@
 (function() {
 
-  window.Console || (window.Console = {});
+  window.Sensors || (window.Sensors = {});
 
   var charts = {};
 
-  Console.overview = function(readings) {
+  Sensors.init = function(source) {
     $("#graphs-loaded").html((new Date()).format());
-    populate_template("sensor", readings, populate_sensor_template);
-    poll();
-    monitor();
-  }
-
-  Console.graphs = function(readings) {
-    $("#graphs-loaded").html((new Date()).format());
-    populate_template("graph", readings, populate_graph_template);
+    $(".sensor_suffix").html(sensor['suffix']);
+    $("." + source).html(reading['reading']);
+//    populate_template("graph", readings, populate_graph_template);
+    format_fields();
+    draw_chart($('#hourly_chart')[0], 'hour', source, null);
+    draw_chart($('#daily_chart')[0], 'day', source, null);
   }
 
   function populate_template(singular_element_name, data_hash, templater) {
@@ -40,8 +38,13 @@
     return template;
   }
 
-  function instantiate_chart(template, dimension, source) {
-    chart = new Mini_Chart(template.find('._' + dimension)[0], dimension);
+  function instantiate_chart_from_template(template, dimension, source) {
+    draw_chart(template.find('._' + dimension)[0], dimension, source);
+  }
+
+  function draw_chart(target, dimension, source, title) {
+    title = typeof title == 'undefined' ? dimension : title;
+    chart = new Mini_Chart(target, title);
     chart.plot( ( sources[source]['monitor_type']=="gauge" ? get_gauge_series_set(dimension, source) : get_meter_series_set(dimension, source) ) );
   }
 
