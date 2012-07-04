@@ -35,7 +35,7 @@ production:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: h3_production
+  database: h3_development
   pool: 5
   username: root
   password:
