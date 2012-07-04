@@ -53,7 +53,7 @@
                 <ul class="dropdown-menu">
                   <% sources.each do |key, value| %>
                     <% if value[:monitor_type]==:pulse %>
-                      <li><%= link_to value[:name], console_index_path %></li>
+                      <li><%= link_to value[:name], "/sensor/meter/#{key}" %></li>
                     <% end %>
                   <% end  %>
                 </ul>
