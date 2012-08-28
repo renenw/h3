@@ -24,6 +24,8 @@ RABBIT_PASSWORD = '2PvvWRzgrivs'
 RABBIT_EXCHANGE = ''
 RABBIT_PROCESS_EXCHANGE = 'process_inbound'
 
+TEMPERATURE_SUFFIX = '&deg; C'
+
 SETTINGS = {
   'timezone' => 'Africa/Johannesburg'
 }
@@ -31,17 +33,23 @@ SETTINGS = {
 MONITORS = {
   'electricity_total'   => { :monitor_type => :pulse, :expected_frequency => 60 },
   'electricity_geyser'  => { :monitor_type => :pulse, :expected_frequency => 60 },
-  'temperature_cellar'  => { :monitor_type => :gauge, :expected_frequency => 300 },
-  'temperature_outside' => { :monitor_type => :gauge, :expected_frequency => 300 },
-  'temperature_inside'  => { :monitor_type => :gauge, :expected_frequency => 300 },
-  'temperature_pool'    => { :monitor_type => :gauge, :range => { :min => 0, :max => 40}, :expected_frequency => 300 },
+  'electricity_pool'    => { :monitor_type => :pulse, :expected_frequency => 60 },
+  'temperature_cellar'  => { :monitor_type => :gauge, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX },
+  'temperature_outside' => { :monitor_type => :gauge, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX  },
+  'temperature_inside'  => { :monitor_type => :gauge, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX  },
+  'temperature_pool'    => { :monitor_type => :gauge, :range => { :min => 0, :max => 40}, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX  },
   'bandwidth'           => { :monitor_type => :mrtg, :expected_frequency => 60  },
   'bandwidth_in'        => { :monitor_type => :pulse, :range => { :min => 0, :max => Infinity}, :expected_frequency => 60 },
   'bandwidth_out'       => { :monitor_type => :pulse, :range => { :min => 0, :max => Infinity}, :expected_frequency => 60 },
   'bandwidth_total'     => { :monitor_type => :pulse, :range => { :min => 0, :max => Infinity}, :expected_frequency => 60 },
   'outlier'             => { :monitor_type => :counter },
-  'a0'                  => { :monitor_type => :counter, :name => 'Pool Monitor' }
+  'alarm_alive'         => { :monitor_type => :counter, :name => 'Alarm Monitor' },
+  'bandwidth_throughput'=> { :monitor_type => :gauge, :expected_frequency => 86400 }
 }
+
+#  'alarm_armed'         => { : },
+#  'alarm_activated'     => {}
+
 
 module UmmpServer
 
@@ -50,7 +58,8 @@ module UmmpServer
   end
 
   def receive_data(udp_data)
-    if udp_data =~ /\A(\w+)(\s[\d\.]+){1,3}$/
+    p udp_data if udp_data =~ /alarm/
+    if udp_data =~ /\A(\w+)(\s[\d\.]+){1,10}$/
       message = { 'received' => Time.now.to_f, 'packet' => udp_data.strip }.to_json
       @ummp_exchange.publish message, :routing_key => 'udp_handler'
     end
@@ -143,6 +152,7 @@ end
 # an opportunity to rewrite messages, ditch them etc
 def handle_udp(message)
   payload = JSON.parse(message)
+  p "New message: #{message}" if message =~ /alarm/
   data = payload['packet'].scan(/[\w\.]+/)
   if data && data[0] && MONITORS[data[0]]
     source_type = MONITORS[data[0]][:monitor_type]
@@ -163,6 +173,7 @@ def handle_udp(message)
                        'payload' => payload,
                      }
     @cache.array_append("30_camp_ground_road.anomoly_log", recent_reading, PAYLOAD_HISTORY_ITEMS)
+    p "Unknown: #{recent_reading}"
   end
 end
 
@@ -551,8 +562,29 @@ def reading_reasonable(payload)
 end
 
 def initialise_monitors
+  # add default names etc
+  MONITORS.each do |key, value|
+    value[:name] = key.gsub(/_/, ' ').split(' ').each{|word| word.capitalize!}.join(' ') unless value[:name]
+  end
   @cache.set("monitors", MONITORS)
   pp @cache.get("monitors")
 end
 
 orchestrate
+
+
+
+#MONITORS = {
+#  'electricity_total'   => { :monitor_type => :pulse, :expected_frequency => 60 },
+#  'electricity_geyser'  => { :monitor_type => :pulse, :expected_frequency => 60 },
+#  'temperature_cellar'  => { :monitor_type => :gauge, :expected_frequency => 300 },
+#  'temperature_outside' => { :monitor_type => :gauge, :expected_frequency => 300 },
+#  'temperature_inside'  => { :monitor_type => :gauge, :expected_frequency => 300 },
+#  'temperature_pool'    => { :monitor_type => :gauge, :range => { :min => 0, :max => 40}, :expected_frequency => 300 },
+#  'bandwidth'           => { :monitor_type => :mrtg, :expected_frequency => 60  },
+#  'bandwidth_in'        => { :monitor_type => :pulse, :range => { :min => 0, :max => Infinity}, :expected_frequency => 60 },
+#  'bandwidth_out'       => { :monitor_type => :pulse, :range => { :min => 0, :max => Infinity}, :expected_frequency => 60 },
+#  'bandwidth_total'     => { :monitor_type => :pulse, :range => { :min => 0, :max => Infinity}, :expected_frequency => 60 },
+#  'outlier'             => { :monitor_type => :counter },
+#  'a0'                  => { :monitor_type => :counter, :name => 'Pool Monitor' }
+#}
