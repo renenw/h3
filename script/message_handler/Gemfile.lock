@@ -1,0 +1,26 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    amq-client (0.8.7)
+      amq-protocol (>= 0.8.4)
+      eventmachine
+    amq-protocol (0.8.4)
+    amqp (0.8.4)
+      amq-client (~> 0.8.7)
+      amq-protocol (~> 0.8.4)
+      eventmachine
+    dalli (1.1.4)
+    eventmachine (0.12.10)
+    json (1.6.3)
+    mysql2 (0.3.11)
+    tzinfo (0.3.29)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  amqp (~> 0.8.4)
+  dalli
+  json (~> 1.6.3)
+  mysql2
+  tzinfo

@@ -1,0 +1,10 @@
+source 'http://rubygems.org'
+
+gem "json", "~> 1.6.3"
+#gem 'bunny', :git => 'https://github.com/ruby-amqp/bunny.git'
+#gem 'bunny'
+gem "amqp", "~> 0.8.4"
+#gem 'carrot'
+gem 'mysql2'
+gem 'dalli'
+gem 'tzinfo'
