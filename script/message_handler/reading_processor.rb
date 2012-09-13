@@ -20,7 +20,7 @@ def main
   initialise_monitors
   mesage_processor = Thread.new() { de_queuer }
 
-  p "Started"
+  p "Started Reading Processor"
 
   mesage_processor.join
 
