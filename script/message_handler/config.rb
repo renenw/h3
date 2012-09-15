@@ -13,7 +13,7 @@ RABBIT_EXCHANGE = ''
 
 RABBIT_PROCESS_EXCHANGE = 'process_inbound'
 
-
+DATA_STORE = '30_camp_ground_road'
 TEMPERATURE_SUFFIX = '&deg; C'
 
 SETTINGS = {

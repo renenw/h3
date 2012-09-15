@@ -20,7 +20,7 @@ module UmmpServer
     p udp_data if udp_data =~ /alarm/
     if udp_data =~ /\A(\w+)(\s[\d\.]+){1,10}$/
       message = { 'received' => Time.now.to_f, 'packet' => udp_data.strip }.to_json
-      @ummp_exchange.publish message, :routing_key => 'udp_handler'
+      @ummp_exchange.publish message, :routing_key => 'udp_message_received'
     end
   end
 end

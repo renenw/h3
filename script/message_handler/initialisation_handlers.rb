@@ -28,7 +28,6 @@ module Initialisation_Handlers
 	  end
 	end
 
-
 	# messages should, by this point, have a basic "events" structure (source, number) with a received time that as closely as practically reflects the event time
 	def initialise_structured_message(message)
 	  #puts "Initialise structured message: #{message}."

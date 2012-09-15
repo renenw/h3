@@ -74,9 +74,9 @@ def de_queuer
       @exchange = channel.direct(RABBIT_EXCHANGE)
       @process_exchange = channel.fanout(RABBIT_PROCESS_EXCHANGE)
 
-      channel.queue('udp_handler', :auto_delete => false).subscribe do |message|
-        handle_udp(message)
-      end
+      #channel.queue('udp_handler', :auto_delete => false).subscribe do |message|
+      #  handle_udp(message)
+      #end
 
       channel.queue('initialise_structured_message', :auto_delete => false).subscribe do |message|
         initialise_structured_message(message)
