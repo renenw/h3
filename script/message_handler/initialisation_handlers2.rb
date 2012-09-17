@@ -2,12 +2,12 @@ module Initialisation_Handlers
 
 	# an opportunity to rewrite messages, ditch them etc
 	def udp_message_received(payload)
-	  p "New message: #{payload}" if payload =~ /alarm/
+	  #p "New message: #{payload}" #if payload =~ /alarm/
 	  data = payload['packet'].scan(/[\w\.]+/)
 	  if data && data[0] && MONITORS[data[0]]
 	    source_type = MONITORS[data[0]][:monitor_type]
 	    if source_type
-	      payload.merge(
+	      payload.merge!(
                         { 'data_store' => DATA_STORE,
                           'source' => data[0],
                           'source_type' => source_type.to_s
@@ -30,6 +30,11 @@ module Initialisation_Handlers
 		next_handler = nil
 		next_handler = ( payload['source'] == :mrtg ? 'handle_mrtg_pre_processing' : 'initialise_structured_message') if payload
 		next_handler
+	end
+
+	def get_local_time(timezone, event_time_in_utc)
+	  tz = TZInfo::Timezone.get(timezone)
+	  tz.utc_to_local(event_time_in_utc)
 	end
 
 end

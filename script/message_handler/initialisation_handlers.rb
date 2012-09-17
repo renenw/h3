@@ -32,12 +32,27 @@ module Initialisation_Handlers
 	def initialise_structured_message(message)
 	  #puts "Initialise structured message: #{message}."
 	  payload = JSON.parse(message)
+	  p "1: #{payload}"
 	  data = payload['packet'].scan(/[\w\.]+/)
 	  i = data[1].to_f.round.to_i
 	  event_time_in_utc = Time.at(payload['received'].to_f)
 	  local_time = get_local_time(SETTINGS['timezone'], event_time_in_utc)
 	  @mysql.query("insert into events (source, float_value, integer_value, created_at) values ('#{data[0]}', #{data[1]}, #{i}, '#{event_time_in_utc.strftime('%Y-%m-%d %H:%M:%S.%6N')}');")
 	  event_id = @mysql.last_id
+	  p "2: #{local_time}"
+	  p "3: #{data[1]}"
+	  x = payload.merge(
+	                                    {
+	                                      'local_time' => local_time.to_f,
+	                                      'dimensions' => get_tagged_dimensions(local_time),
+	                                      'event_id' => event_id,
+	                                      'float_value' => data[1].to_f,
+	                                      'integer_value' => i
+	                                    }
+	                    )
+	  p "4: #{x}"
+	  p "5: #{x.to_json}"
+	  p "6: #{payload['source_type']}"
 	  @exchange.publish payload.merge(
 	                                    {
 	                                      'local_time' => local_time.to_f,

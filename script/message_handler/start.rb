@@ -44,7 +44,8 @@ end
 
 def handle_message(queue, message)
 	p "Received a message for #{queue}: #{message}"
-  result = send(queue, JSON.parse(message))
+  result = self.__send__(queue, JSON.parse(message))
+  #result = udp_message_received(JSON.parse(message))
   if result && @queues[queue]
   	target = @queues[queue]
 	  exchange = case target[:exchange]
