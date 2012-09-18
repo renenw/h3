@@ -1,32 +1,10 @@
 module Monitor_Handlers
 
-	def handle_mrtg_pre_processing(message)
-	  payload = JSON.parse(message)
-	  #puts "MRTG message received: #{payload}"
-	# "packet"=>"bandwidth 1330463695 2198531 2374663"
-	  data = payload['packet'].scan(/[\w\.]+/)
-	  inbound = data[2]
-	  outbound = data[3]
-	  inbound_message = { 'received' => payload['received'], 'packet' => "#{payload['source']}_in #{inbound}" }.to_json
-	  outbound_message = { 'received' => payload['received'], 'packet' => "#{payload['source']}_out #{outbound}" }.to_json
-	  combined_message = { 'received' => payload['received'], 'packet' => "#{payload['source']}_total #{outbound.to_i + inbound.to_i}" }.to_json
-	  @exchange.publish inbound_message, :routing_key => 'udp_handler'  
-	  @exchange.publish outbound_message, :routing_key => 'udp_handler'
-	  @exchange.publish combined_message, :routing_key => 'udp_handler'
-	end
+  def add_converted_values(payload)
+  	payload.merge( { 'converted_value' => payload['float_value'] } )
+  end
 
-	def handle_counter
-	  payload = JSON.parse(message)
-	  @exchange.publish payload.merge( { 'converted_value' => payload['float_value'] } ).to_json, :routing_key => 'reading'
-	end
-
-	def handle_gauge(message)
-	  payload = JSON.parse(message)
-	  @exchange.publish payload.merge( { 'converted_value' => payload['float_value'] } ).to_json, :routing_key => 'reading'
-	end
-
-	def handle_pulse(message)
-	  payload = JSON.parse(message)
+	def handle_pulse_specific_calculations(payload)
 	  prior_pulses = @cache.fetch("#{payload['data_store']}.pulse.last.#{payload['source']}") do
 	    p "pulse miss"
 	    pulses = nil
@@ -36,17 +14,21 @@ module Monitor_Handlers
 	    pulses
 	  end
 	  if prior_pulses
+	  	# leave the two step assignment for clarity
 	    elapsed_pulses = payload['integer_value'] - prior_pulses
-	    # this is kuk. should pass conversion function using monitors structure at start
 	    converted_value = elapsed_pulses
-	    converted_value = pulse_to_watt_hours(elapsed_pulses) unless payload['source'] =~ /band/
-	    @exchange.publish payload.merge( { 'converted_value' => converted_value } ).to_json, :routing_key => 'reading'
+	    payload.merge!( { 'converted_value' => converted_value } )
 	  end
 	  @cache.set("#{payload['data_store']}.pulse.last.#{payload['source']}", payload['integer_value'])
+	  payload
 	end
 
 
-
+	def after_received_pulse(payload)
+		# again, leave the mindless call in for clarity
+		payload['converted_value'] = pulse_to_watt_hours(payload['converted_value']) unless payload['source'] =~ /band/
+		payload
+	end
 
 
 	def pulse_to_watt_hours(pulses)

@@ -1,14 +1,12 @@
 module Reading_Handlers
 
-	def handle_reading(message)
-	  payload = JSON.parse(message)
+	def reading(payload)
 	  reasonable = reading_reasonable(payload)
 	  sql_error = nil
 	  if reasonable
 	    t = payload['dimensions']
 	    begin
 	      @mysql.query "insert into #{payload['data_store']}.readings (source, local_time, reading, year, month, week, day, hour, 5minute, 10minute, 15minute, 30minute, yday) values ('#{payload['source']}', #{payload['local_time']}, #{payload['converted_value']}, #{t['year']}, #{t['month']}, #{t['week']}, #{t['day']}, #{t['hour']}, #{t['5minute']}, #{t['10minute']}, #{t['15minute']}, #{t['30minute']}, #{t['yday']})"
-	      @process_exchange.publish message
 	    rescue #should only really be catching the error on the sql
 	      sql_error = $!
 	    end
@@ -30,10 +28,11 @@ module Reading_Handlers
 	    @cache.array_append("#{payload['data_store']}.anomoly_log", recent_reading, ANOMOLOUS_READING_HISTORY)
 	  end
 
+	  payload
+
 	end
 
-	def handle_cache_reading(message)
-	  payload = JSON.parse(message)
+	def cache_reading(payload)
 	  expires = nil
 	  expires = payload['received']*1000 + 1.5 * MONITORS[payload['source']][:expected_frequency]*1000 if MONITORS[payload['source']][:expected_frequency] 
 	  @cache.set("#{payload['data_store']}.reading.#{payload['source']}", {
@@ -44,8 +43,7 @@ module Reading_Handlers
 	end
 
 
-	def handle_summarisation(message)
-	  payload = JSON.parse(message)
+	def summarisation(payload)
 	  data_store = payload['data_store']
 	  reading    = payload['converted_value']
 	  source     = payload['source']
@@ -58,8 +56,7 @@ module Reading_Handlers
 	  end
 	end
 
-	def handle_history(message)
-	  payload = JSON.parse(message)
+	def handle_history(payload)
 	  history = @cache.get("#{payload['data_store']}.history.#{payload['source']}")
 	  if history
 	    history << { 'local_time' => (payload['local_time']*1000).to_i, 'converted_value' => payload['converted_value'] }
@@ -90,9 +87,8 @@ module Reading_Handlers
 	#end
 
 
-	def handle_calculate_outlier_threshold(message)
+	def calculate_outlier_threshold(payload)
 
-	  payload = JSON.parse(message)
 	  converted_value = payload['converted_value']
 
 	  if MONITORS[payload['source']][:range]
@@ -127,8 +123,7 @@ module Reading_Handlers
 
 	end
 
-	def handle_cache_sources(message)
-	  payload = JSON.parse(message)
+	def cache_sources(payload)
 	  sources = @cache.get("#{payload['data_store']}.sources")
 	  if sources
 	    sources[payload['source']] = payload['received'].to_i
