@@ -3,6 +3,7 @@
 
 require 'amqp'
 require 'json'
+require 'securerandom'
 require './config'
 
 #RABBIT_HOST     = '127.0.0.1'
@@ -17,9 +18,8 @@ module UmmpServer
   end
 
   def receive_data(udp_data)
-    p udp_data if udp_data =~ /alarm/
     if udp_data =~ /\A(\w+)(\s[\d\.]+){1,10}$/
-      message = { 'received' => Time.now.to_f, 'packet' => udp_data.strip }.to_json
+      message = { 'received' => Time.now.to_f, 'packet' => udp_data.strip, 'guid' => SecureRandom.uuid }.to_json
       @ummp_exchange.publish message, :routing_key => 'udp_message_received'
     end
   end

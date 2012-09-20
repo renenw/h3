@@ -72,8 +72,9 @@ def message_handler
 end
 
 def handle_message(queue, message)
-	@log.debug "Handle: #{queue}: #{message}"
-  result = __send__(queue, JSON.parse(message))
+  payload = JSON.parse(message)
+	@log.debug queue, payload
+  result = __send__(queue, payload)
   if result && @queues[queue]
   	target = @queues[queue]
   	case target[:exchange]

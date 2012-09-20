@@ -25,14 +25,12 @@ module Monitor_Handlers
 
 
 	def after_received_pulse(payload)
-		# again, leave the mindless call in for clarity
-		payload['converted_value'] = pulse_to_watt_hours(payload['converted_value']) unless payload['source'] =~ /band/
+		if payload['source'] =~ /electricity_/
+			# pulse_to_watt_hours
+			@log.debug 'Converted pulses to watt hours', payload
+			payload['converted_value'] = payload['converted_value'] * 10
+		end
 		payload
-	end
-
-
-	def pulse_to_watt_hours(pulses)
-	  pulses * 10
 	end
 
 end
