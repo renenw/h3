@@ -63,12 +63,10 @@ def message_handler
       end
 
       @queues.each_key do |queue|
-      	if @queues[queue][:next_queue]
-	      	@log.info "Subscribing to: #{queue}"
-	      	channel.queue(queue.to_s, :auto_delete => false).subscribe do |message|
-	      		handle_message queue, message
-	      	end
-	      end
+    		@log.info "Subscribing to: #{queue}"
+      	channel.queue(queue.to_s, :auto_delete => false).subscribe do |message|
+      		handle_message queue, message
+      	end
       end
 
     end
@@ -81,13 +79,12 @@ def handle_message(queue, message)
   result = __send__(queue, payload)
   if result && @queues[queue]
   	target = @queues[queue]
-  	case target[:exchange]
-    	  when :readings
-    	  	@readings_exchange.publish result.to_json
-  	  	else
-  	  		routing_key = (target[:next_queue].is_a?(Symbol) ? target[:next_queue] : target[:next_queue].call(result))
-  	  		@exchange.publish result.to_json, :routing_key => routing_key.to_s
-    	  end
+    if target[:exchange]
+      @fan_out_exchanges[target[:exchange]][:exchange].publish result.to_json
+    else
+      routing_key = (target[:next_queue].is_a?(Symbol) ? target[:next_queue] : target[:next_queue].call(result))
+  	  @exchange.publish result.to_json, :routing_key => routing_key.to_s
+	  end
 	  
 	end
 end
@@ -98,7 +95,6 @@ def initialise_monitors
     value[:name] = key.gsub(/_/, ' ').split(' ').each{|word| word.capitalize!}.join(' ') unless value[:name]
   end
   @cache.set("monitors", MONITORS)
-  #pp @cache.get("monitors")
 end
 
 def run
