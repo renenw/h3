@@ -24,8 +24,9 @@ include Reading_Handlers
 @cache = Cacher.new('localhost:11211')
 @log   = Log_Wrapper.new
 
-# on_receive (called for both the source type, and the source. Returning nil halts processing)
-# after_received
+# on_receive (called for both the source type, and the source (on_receive_mrtg or on_receive_electricity_pool).
+# after_received (ditto)
+# Returning nil halts processing
 
 @queues = {
 	:udp_message_received 							=> { :next_queue => :on_receive },
@@ -34,12 +35,14 @@ include Reading_Handlers
 	:add_converted_values								=> { :next_queue => :after_received },
 	:handle_pulse_specific_calculations => { :next_queue => :after_received },
 	:after_received											=> { :next_queue => :reading },
-	:reading 														=> {
-																						:exchange => :readings,
-																						:queues		=> [ 'cache_reading', 'summarisation', 'handle_history', 'calculate_outlier_threshold', 'cache_sources' ]
-																					}
+	:reading 														=> { :exchange => :readings }
 }
-# :on_receive       							=> { :next_queue => lambda do |result| udp_message_received_destination_queue(result) end },
+
+@fan_out_exchanges = {
+  :readings => {
+    :queues => [ 'cache_reading', 'summarisation', 'handle_history', 'calculate_outlier_threshold', 'cache_sources' ]
+    },
+}
 
 def message_handler
   EventMachine.run do
@@ -48,18 +51,19 @@ def message_handler
       channel  = AMQP::Channel.new(connection)
 
       @exchange = channel.direct(RABBIT_EXCHANGE)
-      @readings_exchange = channel.fanout(RABBIT_PROCESS_EXCHANGE)
+      @fan_out_exchanges[:readings][:exchange] = channel.fanout(RABBIT_PROCESS_EXCHANGE)
+
+      @fan_out_exchanges.each_key do |exchange|
+        @fan_out_exchanges[exchange][:queues].each do |fanout_queue|
+          @log.info "Binding #{fanout_queue} to fanout exchange: #{exchange}"
+          channel.queue(fanout_queue, :auto_delete => false).bind(@fan_out_exchanges[exchange][:exchange]).subscribe do |message|
+            handle_message fanout_queue, message
+          end
+        end
+      end
 
       @queues.each_key do |queue|
-      	if @queues[queue][:queues]
-      		@queues[queue][:queues].each do |fanout_queue|
-	      		@log.info "Binding to fanout queue: #{fanout_queue}"
-	      		# TODO Make the selection of the exchange more elegant / not hard coded
-	      		channel.queue(fanout_queue, :auto_delete => false).bind(@readings_exchange).subscribe do |message|
-		      		handle_message fanout_queue, message
-		      	end
-		      end
-      	else
+      	if @queues[queue][:next_queue]
 	      	@log.info "Subscribing to: #{queue}"
 	      	channel.queue(queue.to_s, :auto_delete => false).subscribe do |message|
 	      		handle_message queue, message
