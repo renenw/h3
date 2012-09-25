@@ -31,7 +31,8 @@
   }
 
   function populate_sensor_template(template, index, value) {
-    template.children('.source').html(sources[index]['name']);
+    name = ( sources[index] ? sources[index]['name'] : index );
+    template.children('.source').html(name);
     template.children('.reading').html( value['reading'] );
     template.find('.time').html( (new Date(value['local_time'])).format("shortTime",true) ).data('expires', value['expires']);
     return template;
