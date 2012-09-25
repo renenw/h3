@@ -32,9 +32,14 @@
 
   function populate_sensor_template(template, index, value) {
     name = ( sources[index] ? sources[index]['name'] : index );
+    reading = value['reading'] + ( sources[index] && sources[index]['suffix'] ? sources[index]['suffix'] : '' )
+    t = new Date(value['local_time']);
+    var d = new Date();
+    d.setDate(d.getDate() - 1);
+    timeFormat = ( t > d ? "shortTime" : "mediumDateTime");
     template.children('.source').html(name);
-    template.children('.reading').html( value['reading'] );
-    template.find('.time').html( (new Date(value['local_time'])).format("shortTime",true) ).data('expires', value['expires']);
+    template.children('.reading').html( reading );
+    template.find('.time').html( (t).format(timeFormat,true) ).data('expires', value['expires']);
     return template;
   }
 
