@@ -75,18 +75,18 @@ end
 
 def handle_message(queue, message)
   payload = JSON.parse(message)
-	@log.debug queue, payload
-  result = __send__(queue, payload)
-  if result && @queues[queue]
-  	target = @queues[queue]
-    if target[:exchange]
-      @fan_out_exchanges[target[:exchange]][:exchange].publish result.to_json
-    else
-      routing_key = (target[:next_queue].is_a?(Symbol) ? target[:next_queue] : target[:next_queue].call(result))
-  	  @exchange.publish result.to_json, :routing_key => routing_key.to_s
-	  end
-	  
-	end
+	@log.debug(queue, :payload => payload) do
+    result = __send__(queue, payload)
+    if result && @queues[queue]
+    	target = @queues[queue]
+      if target[:exchange]
+        @fan_out_exchanges[target[:exchange]][:exchange].publish result.to_json
+      else
+        routing_key = (target[:next_queue].is_a?(Symbol) ? target[:next_queue] : target[:next_queue].call(result))
+    	  @exchange.publish result.to_json, :routing_key => routing_key.to_s
+  	  end
+  	end
+  end
 end
 
 def initialise_monitors
