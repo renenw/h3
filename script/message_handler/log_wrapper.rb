@@ -1,10 +1,14 @@
 require 'logger'
 require 'benchmark'
+require 'time'
+require 'json'
+
+require './config'
 
 class Log_Wrapper
 	
 	def initialize
-		@log = Logger.new('log.txt', 10, 1024000)
+		@log = Logger.new(LOG_FILE, 10, 1024000)
 	end
 
 	# expects a message (arg[0]) and a hash (arg[1])
@@ -27,6 +31,31 @@ class Log_Wrapper
 
 		raise exception if exception
 
+  end
+
+  def self.grep(search)
+  	open('log.txt') do |f| f.grep(/#{search}/) do |e|
+  			severity, date, pid, label, app, message, guid, actual_message, json = nil
+  			e.gsub(/([\w]+),\s+\[([^\]\s]+)\s+#([^\]]+)]\s+(\w+)\s+--\s+(\w+)?:\s+(.+)/) do |match|
+  				severity, date, pid, label, app, message = $1, Time.parse($2), $3, $4, $5, $6
+					e.gsub(/([\w-]*)\s\|\s(.*)\s\|\s(.*)/) do |parts|
+						guid, actual_message, payload = $1, $2, $3
+						json = JSON.parse(payload) if payload =~ /{.+}/
+					end
+				end
+				{
+					'severity' 					=> severity,
+					'date'							=> date,
+					'pid'								=> pid,
+					'label'							=> label,
+					'app'								=> app,
+					'message'						=> actual_message,
+					'guid'							=> guid,
+					'times'							=> json['times'],
+					'payload'						=> json['payload']
+				}
+  		end
+  	end
   end
 
 
