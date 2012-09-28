@@ -34,6 +34,7 @@ MONITORS = {
   'outlier'             => { :monitor_type => :counter },
   'alarm_alive'         => { :monitor_type => :keep_alive, :name => 'Alarm and Pool Keep Alive', :expected_frequency => 60*60 },
   'alarm_armed'         => { :monitor_type => :switch },
+  'alarm_activated'     => { :monitor_type => :switch },
   'bandwidth_throughput'=> { :monitor_type => :gauge, :expected_frequency => 86400 }
 }
 

@@ -39,6 +39,7 @@ module Reading_Handlers
 	                                                                        'local_time' => payload['local_time']*1000,
 	                                                                        'reading' => payload['converted_value'],
 	                                                                        'expires' => expires,
+	                                                                        'guid' => payload['guid']
 	                                                                       })
 	end
 

@@ -1,3 +1,5 @@
+require 'securerandom'
+
 module Lifecycle_Handlers
 
 	# an opportunity to rewrite messages, ditch them etc
@@ -13,6 +15,7 @@ module Lifecycle_Handlers
                           'source_type' => source_type.to_s
                          }
 	                    )
+	      payload.merge!( { 'guid' => SecureRandom.uuid } ) unless payload['guid']
 	    end
 	  else
 	    recent_reading = {

@@ -1,12 +1,18 @@
 (function() {
 
-  window.Console || (window.Console = {});
-
   var charts = {};
+
+  window.Console || (window.Console = {});
 
   Console.overview = function(readings) {
     $("#graphs-loaded").html((new Date()).format());
     Templater.populate_template("sensor", readings, populate_sensor_template);
+    $(".sensor").click(function(e) {
+      guid = $(this).data('guid');
+      if (guid) {
+        alert(guid);
+      }
+    });
     poll();
     monitor();
   }
@@ -32,11 +38,13 @@
 
   function populate_sensor_template(template, index, value) {
     name = ( sources[index] ? sources[index]['name'] : index );
+    name = name;
     reading = value['reading'] + ( sources[index] && sources[index]['suffix'] ? sources[index]['suffix'] : '' )
     t = new Date(value['local_time']);
     var d = new Date();
     d.setDate(d.getDate() - 1);
     timeFormat = ( t > d ? "shortTime" : "mediumDateTime");
+    template.data('guid', value['guid']);
     template.children('.source').html(name);
     template.children('.reading').html( reading );
     template.find('.time').html( (t).format(timeFormat,true) ).data('expires', value['expires']);
