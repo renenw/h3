@@ -3,8 +3,6 @@ require 'benchmark'
 require 'time'
 require 'json'
 
-require './config'
-
 class Log_Wrapper
 
 	def initialize(logdev = 'log.txt', shift_age = 0, shift_size = 1048576)
@@ -49,7 +47,7 @@ class Log_Wrapper
 					times   = json['times']
 					payload = json['payload']
 				end
-				x = {
+				{
 					'severity' 					=> severity,
 					'date'							=> date,
 					'pid'								=> pid,
@@ -60,8 +58,6 @@ class Log_Wrapper
 					'times'							=> times,
 					'payload'						=> payload
 				}
-				p x
-				nil
   		end
   	end
   end
