@@ -6,9 +6,10 @@ require 'json'
 require './config'
 
 class Log_Wrapper
-	
-	def initialize
-		@log = Logger.new(LOG_FILE, 10, 1024000)
+
+	def initialize(logdev = 'log.txt', shift_age = 0, shift_size = 1048576)
+		@log_file = logdev
+		@log = Logger.new(@log_file, shift_age, shift_size)
 	end
 
 	# expects a message (arg[0]) and a hash (arg[1])
@@ -24,7 +25,7 @@ class Log_Wrapper
 		end
 
 		@log.__send__(method, called_by) do
-			"#{guid} | #{message} | #{(hash ? hash.to_json : '')}"
+			"| #{guid} | #{message} | #{(hash ? hash.to_json : '')}"
 		end
 
 		p message unless method == :debug
@@ -33,17 +34,22 @@ class Log_Wrapper
 
   end
 
-  def self.grep(search)
-  	open('log.txt') do |f| f.grep(/#{search}/) do |e|
+  def grep(search)
+  	open(@log_file) do |f| f.grep(/#{search}/) do |e|
   			severity, date, pid, label, app, message, guid, actual_message, json = nil
-  			e.gsub(/([\w]+),\s+\[([^\]\s]+)\s+#([^\]]+)]\s+(\w+)\s+--\s+(\w+)?:\s+(.+)/) do |match|
+  			e.gsub(/([\w]+),\s+\[([^\]\s]+)\s+#([^\]]+)\]\s+(\w+)\s+--\s+(.+?):\s+\|\s(.+)/) do |match|
   				severity, date, pid, label, app, message = $1, Time.parse($2), $3, $4, $5, $6
-					e.gsub(/([\w-]*)\s\|\s(.*)\s\|\s(.*)/) do |parts|
+					message.gsub(/([\w-]*)\s\|\s(.*)\s\|\s(.*)/) do |parts|
 						guid, actual_message, payload = $1, $2, $3
 						json = JSON.parse(payload) if payload =~ /{.+}/
 					end
 				end
-				{
+				times, payload = nil
+				if json
+					times   = json['times']
+					payload = json['payload']
+				end
+				x = {
 					'severity' 					=> severity,
 					'date'							=> date,
 					'pid'								=> pid,
@@ -51,9 +57,11 @@ class Log_Wrapper
 					'app'								=> app,
 					'message'						=> actual_message,
 					'guid'							=> guid,
-					'times'							=> json['times'],
-					'payload'						=> json['payload']
+					'times'							=> times,
+					'payload'						=> payload
 				}
+				p x
+				nil
   		end
   	end
   end

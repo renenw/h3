@@ -37,7 +37,3 @@ MONITORS = {
   'alarm_activated'     => { :monitor_type => :switch },
   'bandwidth_throughput'=> { :monitor_type => :gauge, :expected_frequency => 86400 }
 }
-
-
-#  'alarm_armed'         => { : },
-#  'alarm_activated'     => {}
