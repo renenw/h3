@@ -27,7 +27,6 @@ module Monitor_Handlers
 	def after_received_pulse(payload)
 		if payload['source'] =~ /electricity_/
 			# pulse_to_watt_hours
-			@log.debug 'Converted pulses to watt hours', payload
 			payload['converted_value'] = payload['converted_value'] * 10
 		end
 		payload

@@ -12,6 +12,7 @@ GEM
     dalli (1.1.4)
     eventmachine (0.12.10)
     json (1.6.3)
+    log_wrapper (0.0.1)
     mysql2 (0.3.11)
     tzinfo (0.3.29)
 
@@ -22,5 +23,6 @@ DEPENDENCIES
   amqp (~> 0.8.4)
   dalli
   json (~> 1.6.3)
+  log_wrapper
   mysql2
   tzinfo

@@ -5,10 +5,11 @@ require "amqp"
 require 'json'
 require 'mysql2'
 require 'tzinfo'
-require './cacher'
 require 'pp'
+require 'log_wrapper'
+
+require './cacher'
 require './config'
-require './log_wrapper'
 
 require './lifecycle_handlers'
 require './mrtg_handlers'
