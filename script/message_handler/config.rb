@@ -12,9 +12,10 @@ RABBIT_EXCHANGE = ''
 
 RABBIT_PROCESS_EXCHANGE = 'process_inbound'
 
-DATA_STORE = '30_camp_ground_road'
-TEMPERATURE_SUFFIX = '&deg; C'
-WATT_HOURS = ' wh<sup>-1</sup>'
+DATA_STORE          = '30_camp_ground_road'
+TEMPERATURE_SUFFIX  = '&deg; C'
+WATT_HOURS          = ' wh<sup>-1</sup>'
+BPS                 = ' bs<sup>-1</sup>'
 
 SETTINGS = {
   'timezone' => 'Africa/Johannesburg'
@@ -36,5 +37,7 @@ MONITORS = {
   'alarm_alive'         => { :monitor_type => :keep_alive, :name => 'Alarm and Pool Keep Alive', :expected_frequency => 60*60 },
   'alarm_armed'         => { :monitor_type => :switch },
   'alarm_activated'     => { :monitor_type => :switch },
-  'bandwidth_throughput'=> { :monitor_type => :gauge, :expected_frequency => 86400 }
+  'bandwidth_throughput'=> { :monitor_type => :gauge, :expected_frequency => 86400 },
+  'bandwidth_bps'       => { :monitor_type => :gauge, :expected_frequency => 86400, :suffix => BPS },
+  'bandwidth_qos'       => { :monitor_type => :gauge, :expected_frequency => 86400 }
 }

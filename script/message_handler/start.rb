@@ -15,11 +15,13 @@ require './lifecycle_handlers'
 require './mrtg_handlers'
 require './monitor_handlers'
 require './reading_handlers'
+require './bandwidth_handlers'
 
 include Lifecycle_Handlers
 include MRTG_Handlers
 include Monitor_Handlers
 include Reading_Handlers
+include Bandwidth_Handlers
 
 @mysql = Mysql2::Client.new(:host => "localhost", :username => "root", :database => "30_camp_ground_road")
 @cache = Cacher.new('localhost:11211')
