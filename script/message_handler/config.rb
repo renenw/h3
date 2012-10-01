@@ -14,15 +14,16 @@ RABBIT_PROCESS_EXCHANGE = 'process_inbound'
 
 DATA_STORE = '30_camp_ground_road'
 TEMPERATURE_SUFFIX = '&deg; C'
+WATT_HOURS = ' wh<sup>-1</sup>'
 
 SETTINGS = {
   'timezone' => 'Africa/Johannesburg'
 }
 
 MONITORS = {
-  'electricity_total'   => { :monitor_type => :pulse, :expected_frequency => 60 },
-  'electricity_geyser'  => { :monitor_type => :pulse, :expected_frequency => 60 },
-  'electricity_pool'    => { :monitor_type => :pulse, :expected_frequency => 60 },
+  'electricity_total'   => { :monitor_type => :pulse, :expected_frequency => 60, :suffix => WATT_HOURS, :range => { :min => 0, :max => Infinity} },
+  'electricity_geyser'  => { :monitor_type => :pulse, :expected_frequency => 60, :suffix => WATT_HOURS, :range => { :min => 0, :max => Infinity} },
+  'electricity_pool'    => { :monitor_type => :pulse, :expected_frequency => 60, :suffix => WATT_HOURS, :range => { :min => 0, :max => Infinity} },
   'temperature_cellar'  => { :monitor_type => :gauge, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX },
   'temperature_outside' => { :monitor_type => :gauge, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX  },
   'temperature_inside'  => { :monitor_type => :gauge, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX  },
