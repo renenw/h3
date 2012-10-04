@@ -10,7 +10,7 @@
     $(".sensor").click(function(e) {
       guid = $(this).data('guid');
       if (guid) {
-        alert(guid);
+        document.location.href='log/' + guid;
       }
     });
     poll();

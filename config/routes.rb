@@ -3,8 +3,9 @@ H3::Application.routes.draw do
   get "console/index"
   get "console/graphs"
   get "console/readings"
-  get "console/anomalies" => 'console#readings', :type => 'anomalies'
-
+  get "console/anomalies"    => 'console#readings', :type => 'anomalies'
+  match 'console/log/:guid'  => 'console#log'
+   
   get "home/index"
 
   get 'sensor/gauge/:source' => 'sensors#gauge'
