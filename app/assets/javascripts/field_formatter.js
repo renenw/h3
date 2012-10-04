@@ -5,7 +5,8 @@
   FieldFormatter.format_fields = function() {
     $('.time').each(function(index, e) {
       t = $(e);
-      t.html( (new Date(Number(t.html()))).format("ddd mmm dd yyyy HH:MM:ss", true) );
+      f = t.data('time_format') || "ddd mmm dd yyyy HH:MM:ss";
+      t.html( (new Date(Number(t.html()))).format(f, true) );
     });
   
     $('.format').each(function(index, element) {
