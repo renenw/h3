@@ -10,6 +10,7 @@ group :assets do
   gem 'sass-rails',   '~> 3.1.5'
   gem 'coffee-rails', '~> 3.1.1'
   gem 'uglifier', '>= 1.0.3'
+  gem 'therubyracer', :platform => :ruby
 end
 
 gem 'jquery-rails'
@@ -27,3 +28,5 @@ end
 gem 'dalli'
 
 gem 'less-rails-bootstrap', '~> 2.0'
+
+gem 'log_wrapper'
