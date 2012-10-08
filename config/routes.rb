@@ -3,6 +3,7 @@ H3::Application.routes.draw do
   get "console/index"
   get "console/graphs"
   get "console/readings"
+  get "console/documentation"
   get "console/anomalies"    => 'console#readings', :type => 'anomalies'
   match 'console/log/:guid'  => 'console#log'
    
@@ -24,8 +25,8 @@ H3::Application.routes.draw do
   match '/api/:data_store/:source/:dimension/summary' => 'api#get_summary', :defaults => { :format => 'json' }      # get the most recent summary value for a sensor, for a dimension
   match '/api/:data_store/:dimension'                 => 'api#get_summaries', :defaults => { :format => 'json' }    # for a dimension, retrieve all the summarised values for all sensors
 
-  match 'login'   => 'sessions#new' 
-
+  match 'login'   => 'sessions#new'
+  match 'logout'  => 'sessions#destroy'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -6,6 +6,9 @@ class ConsoleController < ApplicationController
   def graphs
   end
 
+  def documentation
+  end
+
   def readings
     target = 'reading_log'
     @heading = 'Recent Readings'

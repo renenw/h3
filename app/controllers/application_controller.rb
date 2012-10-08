@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
+  before_filter :ensure_logged_in
   before_filter :add_data_store_to_params
 
  private
@@ -23,6 +24,10 @@ class ApplicationController < ActionController::Base
 
     def memcache
       MemcacheWrapper.instance
+    end
+
+    def ensure_logged_in
+      redirect_to(login_path) unless session_logged_in?
     end
 
     helper_method :current_user
