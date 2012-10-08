@@ -1,4 +1,8 @@
-<tr class="log_line <%=(line['times']['elapsed']==@log_detail['slowest_duration'] ? 'error' : '')%>">
+<%
+	elapsed = 0
+	elapsed ||= line['times']['elapsed']
+%>
+<tr class="log_line <%= (elapsed==@log_detail['slowest_duration'] ? 'error' : '')%> ">
   <td><%= line['severity'] %></td>
   <td>
   	<span class="time" data-time_format='HH:MM:ss'><%= line['date'].to_i*1000 %></span>
@@ -6,5 +10,5 @@
   <td class="source"><%= line['app'] %></td>
   <td class="reading"><%= line['message'] %></td>
   <td class="payload"><%= line['payload'] %></td>
-  <td class="duration" style="text-align: right"><%= number_with_precision(line['times']['elapsed']*1000, :precision => 2, :separator => '.', :delimiter => ' ') %></td>
+  <td class="duration" style="text-align: right"><%= number_with_precision(elapsed*1000, :precision => 2, :separator => '.', :delimiter => ' ') %></td>
 </tr>
