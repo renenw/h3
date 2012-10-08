@@ -7,6 +7,7 @@ require 'mysql2'
 require 'tzinfo'
 require 'pp'
 require 'log_wrapper'
+require 'twitter'
 
 require './cacher'
 require './config'
@@ -16,12 +17,16 @@ require './mrtg_handlers'
 require './monitor_handlers'
 require './reading_handlers'
 require './bandwidth_handlers'
+require './alarm_handlers'
+require './holler'
 
 include Lifecycle_Handlers
 include MRTG_Handlers
 include Monitor_Handlers
 include Reading_Handlers
 include Bandwidth_Handlers
+include Alarm_Handlers
+include Holler
 
 @mysql = Mysql2::Client.new(:host => "localhost", :username => "root", :database => "30_camp_ground_road")
 @cache = Cacher.new('localhost:11211')
@@ -44,7 +49,10 @@ include Bandwidth_Handlers
 @fan_out_exchanges = {
   :readings => {
     :queues => [ 'cache_reading', 'summarisation', 'handle_history', 'calculate_outlier_threshold', 'cache_sources' ]
-    },
+  },
+  :holler   => {
+    :queues => [ 'tweet' ]
+  }
 }
 
 def message_handler
@@ -54,7 +62,8 @@ def message_handler
       channel  = AMQP::Channel.new(connection)
 
       @exchange = channel.direct(RABBIT_EXCHANGE)
-      @fan_out_exchanges[:readings][:exchange] = channel.fanout(RABBIT_PROCESS_EXCHANGE)
+      @fan_out_exchanges[:holler][:exchange]   = channel.fanout(RABBIT_HOLLER_EXCHANGE)
+      @fan_out_exchanges[:readings][:exchange] = channel.fanout(RABBIT_READINGS_EXCHANGE)
 
       @fan_out_exchanges.each_key do |exchange|
         @fan_out_exchanges[exchange][:queues].each do |fanout_queue|

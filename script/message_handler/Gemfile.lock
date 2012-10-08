@@ -11,9 +11,18 @@ GEM
       eventmachine
     dalli (1.1.4)
     eventmachine (0.12.10)
+    faraday (0.8.4)
+      multipart-post (~> 1.1)
     json (1.6.3)
     log_wrapper (0.0.1)
+    multi_json (1.3.6)
+    multipart-post (1.1.5)
     mysql2 (0.3.11)
+    simple_oauth (0.1.9)
+    twitter (4.0.0)
+      faraday (~> 0.8)
+      multi_json (~> 1.3)
+      simple_oauth (~> 0.1.6)
     tzinfo (0.3.29)
 
 PLATFORMS
@@ -25,4 +34,5 @@ DEPENDENCIES
   json (~> 1.6.3)
   log_wrapper
   mysql2
+  twitter
   tzinfo

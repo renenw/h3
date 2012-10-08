@@ -1,3 +1,5 @@
+require './credentials'
+
 Infinity = 1.0/0
 
 CACHED_HISTORY_ITEMS      = 200
@@ -10,7 +12,8 @@ RABBIT_PASSWORD = '2PvvWRzgrivs'
 
 RABBIT_EXCHANGE = ''
 
-RABBIT_PROCESS_EXCHANGE = 'process_inbound'
+RABBIT_READINGS_EXCHANGE  = 'process_inbound'
+RABBIT_HOLLER_EXCHANGE    = 'holler_exchange'
 
 DATA_STORE          = '30_camp_ground_road'
 TEMPERATURE_SUFFIX  = '&deg; C'
