@@ -33,4 +33,4 @@ end
 
 socket = UDPSocket.new
 socket.connect('10.245.77.15', 54545)
-socket.send(forecast.to_json, 0)
+socket.send("weather_forecast #{forecast.to_json}", 0)

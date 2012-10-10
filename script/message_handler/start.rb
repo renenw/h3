@@ -18,6 +18,8 @@ require './monitor_handlers'
 require './reading_handlers'
 require './bandwidth_handlers'
 require './alarm_handlers'
+require './weather_handlers'
+
 require './holler'
 
 include Lifecycle_Handlers
@@ -27,6 +29,7 @@ include Reading_Handlers
 include Bandwidth_Handlers
 include Alarm_Handlers
 include Holler
+include Weather_Handlers
 
 @mysql = Mysql2::Client.new(:host => "localhost", :username => "root", :database => "30_camp_ground_road")
 @cache = Cacher.new('localhost:11211')

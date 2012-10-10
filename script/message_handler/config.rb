@@ -42,5 +42,6 @@ MONITORS = {
   'alarm_activated'     => { :monitor_type => :switch },
   'bandwidth_throughput'=> { :monitor_type => :gauge, :expected_frequency => 86400 },
   'bandwidth_bps'       => { :monitor_type => :gauge, :expected_frequency => 86400, :suffix => BPS },
-  'bandwidth_qos'       => { :monitor_type => :gauge, :expected_frequency => 86400 }
+  'bandwidth_qos'       => { :monitor_type => :gauge, :expected_frequency => 86400 },
+  'weather_forecast'    => { :monitor_type => :keep_alive, :name => 'Weather Forecast', :expected_frequency => 60*60*24 }
 }
