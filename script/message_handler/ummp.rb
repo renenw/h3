@@ -13,12 +13,8 @@ module UmmpServer
   end
 
   def receive_data(udp_data)
-    if udp_data =~ /\A(\w+)(\s[\d\.]+){1,10}$/
-      message = { 'received' => Time.now.to_f, 'packet' => udp_data.strip, 'guid' => SecureRandom.uuid }.to_json
-      @ummp_exchange.publish message, :routing_key => 'udp_message_received'
-    else
-      p "UDP packet rejected #{udp_data}"
-    end
+    message = { 'received' => Time.now.to_f, 'packet' => udp_data.strip, 'guid' => SecureRandom.uuid }.to_json
+    @ummp_exchange.publish message, :routing_key => 'udp_message_received'
   end
 end
 
