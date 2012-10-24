@@ -13,7 +13,7 @@ RABBIT_PASSWORD = '2PvvWRzgrivs'
 RABBIT_EXCHANGE = ''
 
 RABBIT_READINGS_EXCHANGE  = 'process_inbound'
-RABBIT_HOLLER_EXCHANGE    = 'holler_exchange'
+RABBIT_TWITTER_EXCHANGE   = 'holler_exchange'
 
 DATA_STORE          = '30_camp_ground_road'
 TEMPERATURE_SUFFIX  = '&deg; C'
@@ -25,13 +25,49 @@ SETTINGS = {
 }
 
 MONITORS = {
-  'electricity_total'   => { :monitor_type => :pulse, :expected_frequency => 60, :suffix => WATT_HOURS, :range => { :min => 0, :max => Infinity} },
-  'electricity_geyser'  => { :monitor_type => :pulse, :expected_frequency => 60, :suffix => WATT_HOURS, :range => { :min => 0, :max => Infinity} },
-  'electricity_pool'    => { :monitor_type => :pulse, :expected_frequency => 60, :suffix => WATT_HOURS, :range => { :min => 0, :max => Infinity} },
-  'temperature_cellar'  => { :monitor_type => :gauge, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX },
-  'temperature_outside' => { :monitor_type => :gauge, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX  },
-  'temperature_inside'  => { :monitor_type => :gauge, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX  },
-  'temperature_pool'    => { :monitor_type => :gauge, :range => { :min => 0, :max => 40}, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX  },
+  'electricity_total'   => { 
+                              :monitor_type => :pulse, 
+                              :expected_frequency => 60, 
+                              :suffix => WATT_HOURS, 
+                              :range => { :min => 0, :max => Infinity}, 
+                              :websocket => { 
+                                              :dimensions => {
+                                                'day'   => ['sum'],
+                                                'week'  => ['sum'],
+                                                'month' => ['sum']
+                                              }
+                                            } 
+                            },
+  'electricity_geyser'  => { 
+                              :monitor_type => :pulse, 
+                              :expected_frequency => 60, 
+                              :suffix => WATT_HOURS, 
+                              :range => { :min => 0, :max => Infinity},
+                              :websocket => { 
+                                              :dimensions => {
+                                                'day'   => ['sum'],
+                                                'week'  => ['sum'],
+                                                'month' => ['sum']
+                                              }
+                                            } 
+                            },
+  'electricity_pool'    => { 
+                              :monitor_type => :pulse, 
+                              :expected_frequency => 60, 
+                              :suffix => WATT_HOURS, 
+                              :range => { :min => 0, :max => Infinity},
+                              :websocket => { 
+                                              :dimensions => {
+                                                'day'   => ['sum'],
+                                                'week'  => ['sum'],
+                                                'month' => ['sum']
+                                              }
+                                            } 
+                            },
+  'temperature_cellar'  => { :monitor_type => :gauge, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX, :websocket => { :reading => true } },
+  'temperature_outside' => { :monitor_type => :gauge, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX , :websocket => { :reading => true } },
+  'temperature_inside'  => { :monitor_type => :gauge, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX, :websocket => { :reading => true } },
+  'temperature_pool'    => { :monitor_type => :gauge, :range => { :min => 0, :max => 40}, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX, :websocket => { :reading => true } },
   'bandwidth'           => { :monitor_type => :mrtg, :expected_frequency => 60  },
   'bandwidth_in'        => { :monitor_type => :pulse, :range => { :min => 0, :max => Infinity}, :expected_frequency => 60, :suffix => ' bytes' },
   'bandwidth_out'       => { :monitor_type => :pulse, :range => { :min => 0, :max => Infinity}, :expected_frequency => 60, :suffix => ' bytes' },

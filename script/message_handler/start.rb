@@ -20,7 +20,7 @@ require './bandwidth_handlers'
 require './alarm_handlers'
 require './weather_handlers'
 
-require './holler'
+require './tweet'
 
 include Lifecycle_Handlers
 include MRTG_Handlers
@@ -28,7 +28,7 @@ include Monitor_Handlers
 include Reading_Handlers
 include Bandwidth_Handlers
 include Alarm_Handlers
-include Holler
+include Tweet
 include Weather_Handlers
 
 @mysql = Mysql2::Client.new(:host => "localhost", :username => "root", :database => "30_camp_ground_road")
@@ -46,14 +46,14 @@ include Weather_Handlers
 	:add_converted_values								=> { :next_queue => :after_received },
 	:handle_pulse_specific_calculations => { :next_queue => :after_received },
 	:after_received											=> { :next_queue => :reading },
-	:reading 														=> { :exchange => :readings }
+	:reading 														=> { :exchange   => :readings },
 }
 
 @fan_out_exchanges = {
   :readings => {
     :queues => [ 'cache_reading', 'summarisation', 'handle_history', 'calculate_outlier_threshold', 'cache_sources' ]
   },
-  :holler   => {
+  :twitter   => {
     :queues => [ 'tweet' ]
   }
 }
@@ -65,8 +65,8 @@ def message_handler
       channel  = AMQP::Channel.new(connection)
 
       @exchange = channel.direct(RABBIT_EXCHANGE)
-      @fan_out_exchanges[:holler][:exchange]   = channel.fanout(RABBIT_HOLLER_EXCHANGE)
-      @fan_out_exchanges[:readings][:exchange] = channel.fanout(RABBIT_READINGS_EXCHANGE)
+      @fan_out_exchanges[:twitter][:exchange]   = channel.fanout(RABBIT_TWITTER_EXCHANGE)
+      @fan_out_exchanges[:readings][:exchange]  = channel.fanout(RABBIT_READINGS_EXCHANGE)
 
       @fan_out_exchanges.each_key do |exchange|
         @fan_out_exchanges[exchange][:queues].each do |fanout_queue|

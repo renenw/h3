@@ -1,4 +1,4 @@
-module Holler
+module Tweet
 
 	Twitter.configure do |config|
 		config.consumer_key 			= TWITTER_CONSUMER_KEY

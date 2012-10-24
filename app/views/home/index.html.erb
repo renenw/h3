@@ -5,7 +5,7 @@
 			<li class="span2 widget">
 				<div class="thumbnail" style="background-color: #FCF8E3">
 					<div class="widget_caption">Alarm</div>
-					<h1>Armed</h1>
+					<h1 class="alarm_status">Armed</span></h1>
 					<p><small>@ 11:57PM</small></p>
 				</div>
 			</li>
@@ -13,7 +13,7 @@
 			<li class="span2 widget">
 				<div class="thumbnail">
 					<div class="widget_caption">Inside</div>
-					<h1>28.2&deg;C</h1>
+					<h1><span class="temperature_inside_reading">-</span>&deg;C</h1>
 					<p><small>Today: 17.1&deg;C - 29.0&deg;C</small></p>
 				</div>
 			</li>
@@ -21,7 +21,7 @@
 			<li class="span2 widget">
 				<div class="thumbnail">
 					<div class="widget_caption">Outside</div>
-					<h1>28.2&deg;C</h1>
+					<h1><span class="temperature_outside_reading">-</span>&deg;C</h1>
 					<p><small>Today: 17.1&deg;C - 29.0&deg;C</small></p>
 				</div>
 			</li>
@@ -35,8 +35,8 @@
 
 			<li class="span2 widget">
 				<div class="thumbnail">
-					<p>Pool: 28.2&deg;C</p>
-					<p>Cellar: 28.2&deg;C</p>
+					<p>Pool: <span class="temperature_pool_reading">-</span>&deg;C</p>
+					<p>Cellar: <span class="temperature_cellar_reading">-</span>&deg;C</p>
 				</div>
 			</li>
 
@@ -102,9 +102,23 @@
 							<tr><td class="widget_caption_cell">Electricity</td><td>Day</td><td>Week</td><td>Month</td></tr>
 						</thead>
 						<tbody>
-							<tr><td>Total</td><td>39kW</td><td>640kW</td><td>640kW</td></tr>
-							<tr><td>Pool</td><td>43%</td><td>51%</td><td>51%</td></tr>
-							<tr><td>Geyser</td><td>17%</td><td>14%</td><td>14%</td></tr>
+							<tr>
+									<td>Total</td>
+									<td><span id="electricity_total_day">39</span>kW</td>
+									<td><span id="electricity_total_week">640</span>kW</td>
+									<td><span id="electricity_total_month">640</span>kW</td></tr>
+							<tr>
+								<td>Pool</td>
+								<td><span id="electricity_pool_day">43</span>%</td>
+								<td><span id="electricity_pool_week">51</span>%</td>
+								<td><span id="electricity_pool_month">51</span>%</td>
+							</tr>
+							<tr>
+								<td>Geyser</td>
+								<td><span id="electricity_geyser_day">17</span>%</td>
+								<td><span id="electricity_geyser_week">14</span>%</td>
+								<td><span id="electricity_geyser_month">14</span>%</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -135,6 +149,15 @@
 					<button class="btn btn-mini btn-info">Access</button>
 				</div>
 			</li>
+
+			<li class="span6 widget">
+				<div class="thumbnail">
+					<div class="widget_caption">Murmur</div>
+					<p><small><span id="murmur">ola?</span></small></p>
+				</div>
+			</li>
+
+
 		</ul>
 	</div>
 </div>

@@ -1,4 +1,8 @@
+require './websocket'
+
 module Reading_Handlers
+
+	include Websocket
 
 	def reading(payload)
 		reasonable = reading_reasonable(payload)
@@ -23,6 +27,8 @@ module Reading_Handlers
 	                     'sql_error' => sql_error,
 	                   }
 	  @cache.array_append("#{payload['data_store']}.reading_log", recent_reading, PAYLOAD_HISTORY_ITEMS)
+
+	  broadcast_reading_to_websockets payload
 
 	  if (sql_error || !reasonable)
 	    @cache.array_append("#{payload['data_store']}.anomoly_log", recent_reading, ANOMOLOUS_READING_HISTORY)
@@ -50,11 +56,17 @@ module Reading_Handlers
 	  source     = payload['source']
 	  local_time = payload['local_time'].to_i
 
+	  summary 	 = {}
+
 	  payload['dimensions'].each do |dimension, tag|
 	    cached_entry = get_current_summary_cache_entry(data_store, source, dimension, tag, reading)
 	    history = update_summary_history_cache(data_store, source, dimension, tag, cached_entry) if dimension != 'all_time'
-	#    print_history "#{source} #{dimension}:", history if history && dimension != 'all_time'
+	    #print_history "#{source} #{dimension}:", history if history && dimension != 'all_time'
+	    summary[dimension] = cached_entry
 	  end
+
+	  broadcast_dimensions_to_websockets payload, summary
+
 	end
 
 	def handle_history(payload)
@@ -73,20 +85,20 @@ module Reading_Handlers
 	end
 
 
-
-	#def print_history(description, history)
-	#  l = ""
-	#  p description
-	#  history.each do |e|
-	#    l = l + " | #{e['tag']} #{e['values']['sum']}"
-	#    if l.length > 120
-	#      p l
-	#      l = ""
-	#    end
-	#  end
-	#  p l
-	#end
-
+=begin
+	def print_history(description, history)
+	  l = ""
+	  p description
+	  history.each do |e|
+	    l = l + " | #{e['tag']} #{e['values']['sum']}"
+	    if l.length > 120
+	      p l
+	      l = ""
+	    end
+	  end
+	  p l
+	end
+=end
 
 	def calculate_outlier_threshold(payload)
 
