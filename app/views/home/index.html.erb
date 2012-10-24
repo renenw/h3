@@ -28,11 +28,10 @@
 
 			<li class="span2 widget">
 				<div class="thumbnail">
-					<p>Sunrise: 7:07AM</p>
-					<p>Sunset: 9:00PM</p>
+					<p>Sunrise: <%= SunTime.new(Time.now.to_date, -33.95283, 18.48056).sunrise.in_time_zone.strftime("%I:%M %p") %></p>
+					<p>Sunset: <%= SunTime.new(Time.now.to_date, -33.95283, 18.48056).sunset.in_time_zone.strftime("%I:%M %p") %></p>
 				</div>
 			</li>
-
 			<li class="span2 widget">
 				<div class="thumbnail">
 					<p>Pool: <span class="temperature_pool_reading">-</span>&deg;C</p>

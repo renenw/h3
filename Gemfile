@@ -26,7 +26,6 @@ group :test do
 end
 
 gem 'dalli'
-
 gem 'less-rails-bootstrap', '~> 2.0'
-
 gem 'log_wrapper'
+gem 'sun_time'

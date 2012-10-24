@@ -3,8 +3,13 @@ class ApplicationController < ActionController::Base
 
   before_filter :ensure_logged_in
   before_filter :add_data_store_to_params
+  before_filter :set_timezone
 
- private
+  private
+
+    def set_timezone
+      Time.zone = 'Pretoria'
+    end
 
     def add_data_store_to_params
       params['data_store'] = session[:data_store] unless params['data_store']
