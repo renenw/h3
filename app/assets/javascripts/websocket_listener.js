@@ -23,6 +23,7 @@
     process_alarm(payload);
     process_basic_readings(payload);
     process_electricity(payload);
+    process_dimensions(payload);
   }
 
   function process_basic_readings(payload) {
@@ -34,6 +35,18 @@
   function process_alarm(payload) {
     if (payload["source"]=="alarm_armed") {
       $(".alarm_status").html(payload["message"]);
+    }
+  }
+
+  function process_dimensions(payload) {
+    if (payload['message_type']=='dimensions') {
+      message = payload['message'];
+      for (var dimension in message) {
+        values = message[dimension]['values'];
+        for (var stat in values) {
+          $("." + payload['source'] + "_" + dimension + "_" + stat).html(values[stat]);
+        }
+      }
     }
   }
 

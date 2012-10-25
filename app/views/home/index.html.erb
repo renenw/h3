@@ -14,7 +14,7 @@
 				<div class="thumbnail">
 					<div class="widget_caption">Inside</div>
 					<h1><span class="temperature_inside_reading"><%=@readings['temperature_inside']['reading']%></span>&deg;C</h1>
-					<p><small>Today: 17.1&deg;C - 29.0&deg;C</small></p>
+					<p><small>Today: <span class="temperature_inside_day_min"><%= @inside_day['min'] %></span>&deg;C - <span class="temperature_inside_day_max"><%= @inside_day['max'] %>&deg;C</small></p>
 				</div>
 			</li>
 
@@ -22,7 +22,7 @@
 				<div class="thumbnail">
 					<div class="widget_caption">Outside</div>
 					<h1><span class="temperature_outside_reading"><%=@readings['temperature_outside']['reading']%></span>&deg;C</h1>
-					<p><small>Today: 17.1&deg;C - 29.0&deg;C</small></p>
+					<p><small>Today: <span class="temperature_outside_day_min"><%= @outside_day['min'] %></span>&deg;C - <span class="temperature_outside_day_max"><%= @outside_day['max'] %>&deg;C</small></p>
 				</div>
 			</li>
 

@@ -2,7 +2,7 @@ module Alarm_Handlers
 
 	def after_received_alarm_armed(payload)
 		
-		broadcast_message_to_websockets 'alarm', ( payload['integer_value']==0 ? 'Disarmed' : 'Armed' ), payload
+		broadcast_message_to_websockets 'alarm', ( payload['integer_value']==0 ? 'Unarmed' : 'Armed' ), payload
 
 		time = Time.at(payload['local_time'])
 		message = {

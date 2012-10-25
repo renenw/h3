@@ -65,8 +65,28 @@ MONITORS = {
                                             } 
                             },
   'temperature_cellar'  => { :monitor_type => :gauge, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX, :websocket => { :reading => true } },
-  'temperature_outside' => { :monitor_type => :gauge, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX , :websocket => { :reading => true } },
-  'temperature_inside'  => { :monitor_type => :gauge, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX, :websocket => { :reading => true } },
+  'temperature_outside' => { 
+                              :monitor_type => :gauge, 
+                              :expected_frequency => 300, 
+                              :suffix => TEMPERATURE_SUFFIX , 
+                              :websocket => { 
+                                              :reading => true,
+                                              :dimensions => {
+                                                'day'   => ['min', 'max']
+                                              }
+                                            }
+                            },
+  'temperature_inside'  => { 
+                              :monitor_type => :gauge, 
+                              :expected_frequency => 300, 
+                              :suffix => TEMPERATURE_SUFFIX, 
+                              :websocket => { 
+                                              :reading => true,
+                                              :dimensions => {
+                                                'day'   => ['min', 'max']
+                                              }
+                                            }
+                            },
   'temperature_pool'    => { :monitor_type => :gauge, :range => { :min => 0, :max => 40}, :expected_frequency => 300, :suffix => TEMPERATURE_SUFFIX, :websocket => { :reading => true } },
   'bandwidth'           => { :monitor_type => :mrtg, :expected_frequency => 60  },
   'bandwidth_in'        => { :monitor_type => :pulse, :range => { :min => 0, :max => Infinity}, :expected_frequency => 60, :suffix => ' bytes' },
