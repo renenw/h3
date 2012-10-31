@@ -24,6 +24,7 @@
     process_basic_readings(payload);
     process_electricity(payload);
     process_dimensions(payload);
+    FieldFormatter.format_fields();
   }
 
   function process_basic_readings(payload) {
