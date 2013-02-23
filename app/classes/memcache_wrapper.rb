@@ -83,9 +83,24 @@ class MemcacheWrapper
         mapped_key = yield(key) if block_given?
         mapped_keys["#{data_store}.#{mapped_key}"] = key
       end
-      Hash[memcache_connector.get_multi(mapped_keys.keys).map do |k, v|
+      get_fancy_hash.merge(Hash[memcache_connector.get_multi(mapped_keys.keys).map do |k, v|
         [mapped_keys[k], v] 
-      end]
+      end])
+    end
+
+    def get_fancy_hash
+      Hash.new do |hash, key|
+        retval = nil
+        p "Cache miss: #{key} #{hash}"
+        if (key=='sum') || (key=='reading') || (key=='local_time') || (key=='min') || (key=='max')
+          p 'and i returned 0'
+          retval = 0
+        else
+          p 'and i returned {}'
+          retval = get_fancy_hash
+        end
+        retval
+      end
     end
 
 end
