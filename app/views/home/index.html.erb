@@ -5,8 +5,8 @@
 			<li class="span2 widget">
 				<div class="thumbnail" style="background-color: #FCF8E3">
 					<div class="widget_caption">Alarm</div>
-					<h1 class="alarm_status"><%= (@readings['alarm_armed']['reading']==1 ? 'Armed' : 'Unarmed') %></span></h1>
-					<p><small><span class="time" data-time_format="d/mm @ hh:MM tt"><%=@readings['alarm_armed']['local_time']%></span></small></p>
+					<h1 class="alarm_status"><%= (@readings['alarm_armed']['reading']==1 ? 'Armed' : 'Off') %></span></h1>
+					<p><small><span class="alarm_status_time time" data-time_format="d/mm @ hh:MM tt"><%=@readings['alarm_armed']['local_time']%></span></small></p>
 				</div>
 			</li>
 
@@ -14,7 +14,7 @@
 				<div class="thumbnail">
 					<div class="widget_caption">Inside</div>
 					<h1><span class="temperature_inside_reading format" data-format="#.0"><%=@readings['temperature_inside']['reading']%></span>&deg;C</h1>
-					<p><small>Today: <span class="temperature_inside_day_min format" data-format="#.0"><%= @inside_day['min'] %></span>&deg;C - <span class="temperature_inside_day_max format" data-format="#.0"><%= @inside_day['max'] %></small>&deg;C</p>
+					<p><small>Today: <span class="temperature_inside_day_min format" data-format="#.0"><%= @inside_day['min'] %></span>&deg;C - <span class="temperature_inside_day_max format" data-format="#.0"><%= @inside_day['max'] %></span>&deg;C</small></p>
 				</div>
 			</li>
 
@@ -22,7 +22,7 @@
 				<div class="thumbnail">
 					<div class="widget_caption">Outside</div>
 					<h1><span class="temperature_outside_reading format" data-format="#.0"><%=@readings['temperature_outside']['reading']%></span>&deg;C</h1>
-					<p><small>Today: <span class="temperature_outside_day_min format" data-format="#.0"><%= @outside_day['min'] %></span>&deg;C - <span class="temperature_outside_day_max format" data-format="#.0"><%= @outside_day['max'] %></small>&deg;C</p>
+					<p><small>Today: <span class="temperature_outside_day_min format" data-format="#.0"><%= @outside_day['min'] %></span>&deg;C - <span class="temperature_outside_day_max format" data-format="#.0"><%= @outside_day['max'] %></span>&deg;C</small></p>
 				</div>
 			</li>
 
@@ -41,8 +41,8 @@
 
 			<li class="span2 widget">
 				<div class="thumbnail">
-					<p>Net: <span class="label label-success"><span><%=(@readings['bandwidth_bps']['reading']/1024).round %></span> kBs<sup>-1</sup></span></p>
-					<p>QoS: <span class="label label-warning"><span><%=@readings['bandwidth_qos']['reading'].round(2) %></span></p>
+					<p>Net: <span class="label <%=@bps_class%>"><span><%=@bps %></span> kBs<sup>-1</sup></span></p>
+					<p>QoS: <span class="label <%=@qos_class%>"><span><%=@qos %></span></p>
 				</div>
 			</li>
 
@@ -103,20 +103,20 @@
 						<tbody>
 							<tr>
 									<td>Total</td>
-									<td><span id="electricity_total_day" class="format" data-format="#.00">39</span>kW</td>
-									<td><span id="electricity_total_week" class="format" data-format="#.00">640</span>kW</td>
-									<td><span id="electricity_total_month" class="format" data-format="#.00">640</span>kW</td></tr>
+									<td><span id="electricity_total_day" class="format" data-format="#.00"><%=@electricity_total_day%></span>kW</td>
+									<td><span id="electricity_total_week" class="format" data-format="#"><%=@electricity_total_week.round %></span>kW</td>
+									<td><span id="electricity_total_month" class="format" data-format="#"><%=@electricity_total_month.round %></span>kW</td></tr>
 							<tr>
 								<td>Pool</td>
-								<td><span id="electricity_pool_day" class="format" data-format="#.0">43</span>%</td>
-								<td><span id="electricity_pool_week" class="format" data-format="#.0">51</span>%</td>
-								<td><span id="electricity_pool_month" class="format" data-format="#.0">51</span>%</td>
+								<td><span id="electricity_pool_day" class="format" data-format="#">-</span>%</td>
+								<td><span id="electricity_pool_week" class="format" data-format="#">-</span>%</td>
+								<td><span id="electricity_pool_month" class="format" data-format="#">-</span>%</td>
 							</tr>
 							<tr>
 								<td>Geyser</td>
-								<td><span id="electricity_geyser_day" class="format" data-format="#.0">17</span>%</td>
-								<td><span id="electricity_geyser_week" class="format" data-format="#.0">14</span>%</td>
-								<td><span id="electricity_geyser_month" class="format" data-format="#.0">14</span>%</td>
+								<td><span id="electricity_geyser_day" class="format" data-format="#">-</span>%</td>
+								<td><span id="electricity_geyser_week" class="format" data-format="#">-</span>%</td>
+								<td><span id="electricity_geyser_month" class="format" data-format="#">-</span>%</td>
 							</tr>
 						</tbody>
 					</table>

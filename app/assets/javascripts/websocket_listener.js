@@ -36,6 +36,8 @@
   function process_alarm(payload) {
     if (payload["source"]=="alarm_armed") {
       $(".alarm_status").html(payload["message"]);
+      d = new Date();
+      $(".alarm_status_time").data('time', (d.getTime()-d.getTimezoneOffset()*60*1000));
     }
   }
 
