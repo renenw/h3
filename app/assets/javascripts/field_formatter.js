@@ -6,7 +6,10 @@
     $('.time').each(function(index, e) {
       t = $(e);
       f = t.data('time_format') || "ddd mmm dd yyyy HH:MM:ss";
-      t.html( (new Date(Number(t.html()))).format(f, true) );
+      v = t.data('time') || t.html();
+      if (!isNaN(v)) {
+        t.html( (new Date(Number(v))).format(f, true) );
+      }
     });
   
     $('.format').each(function(index, element) {
