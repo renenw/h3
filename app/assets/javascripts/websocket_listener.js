@@ -2,7 +2,7 @@
 
   window.WebSocketListener || (window.WebSocketListener = {});
 
-  socket = new WebSocket('ws://ec2-50-19-129-102.compute-1.amazonaws.com:8081');
+  socket = new WebSocket('ws://' + window.location.hostname +':8081');
 
   socket.onmessage = function(mess) {
     payload = $.parseJSON(mess.data);

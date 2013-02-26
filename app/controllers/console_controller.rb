@@ -20,7 +20,7 @@ class ConsoleController < ApplicationController
   end
 
   def log
-    log = Log_Wrapper.new('/home/ubuntu/udp/log.txt')
+    log = Log_Wrapper.new('/home/renen/cep/log.txt')
     @log_detail = log.web_grep(params['guid'])
   end
 
