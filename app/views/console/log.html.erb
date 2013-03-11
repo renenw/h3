@@ -13,7 +13,7 @@
   			<td>End Time</td><td><span class="time" data-time_format='HH:MM:ss'><%= @log_detail['end_time'].to_i*1000 %></span></td>
   		</tr>
   		<tr>
-  			<td>Duration</td><td><span><%= @log_detail['duration'].to_i*1000 %></span> seconds</td>
+  			<td>Duration</td><td><span><%= @log_detail['duration'].to_i %></span> seconds</td>
   		</tr>
   		<% if @log_detail['times'] %>
 	  		<tr>
