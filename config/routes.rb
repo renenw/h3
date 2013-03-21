@@ -16,6 +16,8 @@ H3::Application.routes.draw do
 
   resources :sessions
   resources :users
+  
+  resources :alarm, :only => :create
 
   match '/api/:data_store/sources'                    => 'api#get_sensor_list', :defaults => { :format => 'json' }  # list sources
   match '/api/:data_store/readings'                   => 'api#get_readings', :defaults => { :format => 'json' }     # show the most recent reading / state for each source
