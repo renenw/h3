@@ -68,6 +68,9 @@
                   <li><%= link_to "Readings Log", console_readings_path(:n=>"50") %></li>
                   <li><a href="/console/anomalies?n=50">Anomalies</a></li>
                   <li class="divider"></li>
+                  <li><%= link_to "1Wire", "http://192.168.0.252:2121/" %></li>
+                  <li><%= link_to "Rabbit", "http://192.168.0.252:15672/#/" %></li>
+                  <li class="divider"></li>
                   <li><%= link_to "API Documentation", console_documentation_path %></li>
                 </ul>
               </li>
