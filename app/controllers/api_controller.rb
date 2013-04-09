@@ -34,6 +34,12 @@ class ApiController < ApplicationController
     end
   end
 
+  def get_messages
+    respond_to do |format|
+      format.json  { render :json => memcache.get_messages(params) }
+    end
+  end
+
   def udp_put
     if params['data_store'] == '30_camp_ground_road'
       socket = UDPSocket.new

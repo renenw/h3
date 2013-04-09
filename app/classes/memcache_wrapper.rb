@@ -43,6 +43,10 @@ class MemcacheWrapper
     end
   end
 
+  def get_messages(params)
+    get_array('messages', params)
+  end
+
   def get_array(array_name, params)
     memcache_connector.array_get("#{params['data_store']}.#{array_name}", params['n'])
   end
@@ -91,12 +95,9 @@ class MemcacheWrapper
     def get_fancy_hash
       Hash.new do |hash, key|
         retval = nil
-        p "Cache miss: #{key} #{hash}"
         if (key=='sum') || (key=='reading') || (key=='local_time') || (key=='min') || (key=='max')
-          p 'and i returned 0'
           retval = 0
         else
-          p 'and i returned {}'
           retval = get_fancy_hash
         end
         retval

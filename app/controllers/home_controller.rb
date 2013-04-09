@@ -10,6 +10,10 @@ class HomeController < ApplicationController
     @electricity_total_week   = memcache.get_summary('data_store' => params['data_store'], 'source' => 'electricity_total', 'dimension' => 'week' )['electricity_total']['values']['sum']/1000
     @electricity_total_month  = memcache.get_summary('data_store' => params['data_store'], 'source' => 'electricity_total', 'dimension' => 'month' )['electricity_total']['values']['sum']/1000
 
+    @message            = memcache.get_array("#{params['data_store']}.messages.cached", params)
+    p "xxx"
+    p @messages
+
     @bps        = (@readings['bandwidth_bps']['reading']/1024).round
     @bps_class  = ''
     @bps_class  = 'label-success' if @bps>300

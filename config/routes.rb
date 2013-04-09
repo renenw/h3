@@ -20,13 +20,15 @@ H3::Application.routes.draw do
   resources :alarm, :only => :create
 
   get '/api/:data_store/sources'                    => 'api#get_sensor_list', :defaults => { :format => 'json' }  # list sources
-  get '/api/:data_store/readings'                   => 'api#get_readings', :defaults => { :format => 'json' }     # show the most recent reading / state for each source
-  get '/api/:data_store/:source/reading'            => 'api#get_readings', :defaults => { :format => 'json' }     # for a single sensor, show the current state
-  get '/api/:data_store/:source/readings'           => 'api#get_history', :defaults => { :format => 'json' }      # show the most recent readings (50) for a sensor
-  get '/api/:data_store/:source/:dimension'         => 'api#get_summaries', :defaults => { :format => 'json' }    # retrieve the last 50 summarised data points for a sensor, for a dimension
-  get '/api/:data_store/:source/:dimension/summary' => 'api#get_summary', :defaults => { :format => 'json' }      # get the most recent summary value for a sensor, for a dimension
-  get '/api/:data_store/:dimension'                 => 'api#get_summaries', :defaults => { :format => 'json' }    # for a dimension, retrieve all the summarised values for all sensors
+  get '/api/:data_store/readings'                   => 'api#get_readings',    :defaults => { :format => 'json' }  # show the most recent reading / state for each source
+  get '/api/:data_store/messages'                   => 'api#get_messages',    :defaults => { :format => 'json' }  # for a dimension, retrieve all the summarised values for all sensors
+  get '/api/:data_store/:source/reading'            => 'api#get_readings',    :defaults => { :format => 'json' }  # for a single sensor, show the current state
+  get '/api/:data_store/:source/readings'           => 'api#get_history',     :defaults => { :format => 'json' }  # show the most recent readings (50) for a sensor
+  get '/api/:data_store/:source/:dimension'         => 'api#get_summaries',   :defaults => { :format => 'json' }  # retrieve the last 50 summarised data points for a sensor, for a dimension
+  get '/api/:data_store/:source/:dimension/summary' => 'api#get_summary',     :defaults => { :format => 'json' }  # get the most recent summary value for a sensor, for a dimension
+  get '/api/:data_store/:dimension'                 => 'api#get_summaries',   :defaults => { :format => 'json' }  # for a dimension, retrieve all the summarised values for all sensors
   put '/api/:data_store/:source/:value'             => 'api#udp_put'                                              # push a message to the UDP server
+
 
   match 'login'   => 'sessions#new'
   match 'logout'  => 'sessions#destroy'
