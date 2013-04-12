@@ -1,0 +1,12 @@
+<%
+  error = message['log_level']=='error'
+  @type_counts[message['message_type']] ||= 0
+  @type_counts[message['message_type']] += 1 if error
+  n = (Time.now.to_i - 24*60*60)*1000
+  visible = error && ((message['local_time'] > n) || (@type_counts[message['message_type']]<4))
+%>
+<tr style="<%=(visible ? '' : 'display: none;')%>" class="displayed">
+  <td><i class="<%=@message_icons[message['message_type']]%> <%=(visible ? 'not-white' : 'icon-white')%>"></i></td>
+  <td><%=message['message']%></td>
+  <td class="time" data-time_format="d/mm @ h:MM tt" style="white-space:nowrap;"><%=message['local_time']%></td>
+</tr>

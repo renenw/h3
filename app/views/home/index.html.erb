@@ -133,20 +133,22 @@
 
 			<li class="span6 widget">
 				<div class="widget_table">
-					<table class="table table-striped table-hover table-condensed table-bordered" style="margin-bottom: 5px;">
-						<tr><td>1h</td><td>Jungle gym irrigation ran for 15 minutes.</td><td>5:12PM</td></tr>
-						<tr><td>2h</td><td>Jungle gym irrigation ran for 15 minutes.</td><td>12:12AM</td></tr>
-						<tr><td>1d</td><td>Jungle gym irrigation ran for 15 minutes.</td><td>6/12 @ 11:53AM</td></tr>
-						<tr><td>1d</td><td>Jungle gym irrigation ran for 15 minutes.</td><td>6/12 @ 11:53AM</td></tr>
-						<tr><td>2d</td><td>Jungle gym irrigation ran for 15 minutes.</td><td>6/12 @ 11:53AM</td></tr>
+					<table class="table table-hover table-condensed table-bordered messages" style="margin-bottom: 5px;">
+						<thead>
+							<tr><td colspan=3>
+									<i class="icon-star"></i> |
+									<i class="icon-bell"></i>
+									<i class="icon-tint"></i>
+									<i class="icon-share"></i>
+									<i class="icon-envelope"></i>
+							</td></tr>
+						</thead>
+						<tbody>
+							<%= render :partial => "message", :collection => @messages %>
+						</tbody>
 					</table>
 				</div>
 
-				<div class="btn-group"data-toggle="buttons-checkbox">
-					<button class="btn btn-mini btn-info">Alarm</button>
-					<button class="btn btn-mini btn-info">Watering</button>
-					<button class="btn btn-mini btn-info">Access</button>
-				</div>
 			</li>
 
 			<li class="span6 widget">
@@ -162,6 +164,7 @@
 </div>
 
 <% content_for :js_init do %>
+	Home.init();
 <% end %>
 
 <% content_for :js_end do %>
