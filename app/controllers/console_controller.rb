@@ -15,6 +15,9 @@ class ConsoleController < ApplicationController
     if params['type'] == 'anomalies'
       target = 'anomoly_log'
       @heading = 'Anomalies'
+    elsif params['type'] == 'failures'
+      target = 'failure_log'
+      @heading = 'Failures'
     end
     @readings = memcache.get_array(target, params)
   end

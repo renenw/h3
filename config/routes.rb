@@ -5,6 +5,7 @@ H3::Application.routes.draw do
   get "console/readings"
   get "console/documentation"
   get "console/anomalies"    => 'console#readings', :type => 'anomalies'
+  get "console/failures"     => 'console#readings', :type => 'failures'
   match 'console/log/:guid'  => 'console#log'
    
   get "home/index"

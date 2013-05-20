@@ -1,5 +1,6 @@
 <tr class="reading">
   <td><span class="time"><%= reading['local_time'] %></span></td>
+
   <td class="source">
     <%= reading['source'] %><br/>
     <% if reading['outlier'] %>
@@ -11,11 +12,20 @@
     <% if reading['Unknown'] %>
       <span class="label label-important">Unknown Sensor</span>
     <% end %>
-  </td>
-  <td class="reading">
-    <%= reading['payload'] %>
-    <% if reading['sql_error']  %>
-      <br/><br/><b><%= reading['sql_error'] %></b>
+    <% if reading['error_class'] %>
+      <span class="label label-important"><%=reading['error_class']%></span><br/>
+      <span class="label label-warning"><%=reading['queue']%></span>
     <% end %>
   </td>
+
+  <td class="reading">
+    <% if reading['error_message'] || reading['sql_error'] %>
+      <b><%= reading['error_message'] %><%= reading['sql_error'] %></b><br/><br/>
+    <% end %>
+    <% if reading['error_backtrace'] %>
+      <%= reading['error_backtrace'].html_safe %><br/><br/>
+    <% end %>
+    <%= reading['payload'] %>
+  </td>
+
 </tr>
