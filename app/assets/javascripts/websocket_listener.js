@@ -24,6 +24,7 @@
     process_basic_readings(payload);
     process_electricity(payload);
     process_dimensions(payload);
+    process_access(payload);
     FieldFormatter.format_fields();
   }
 
@@ -38,6 +39,12 @@
       $(".alarm_status").html(payload["message"]);
       d = new Date();
       $(".alarm_status_time").data('time', (d.getTime()-d.getTimezoneOffset()*60*1000));
+    }
+  }
+
+  function process_access(payload) {
+    if (payload["message_type"]=="access") {
+      prepend_message(payload);
     }
   }
 
@@ -82,6 +89,25 @@
         }
       }
     }
+  }
+
+  function prepend_message(payload) {
+    icon = $("#" + payload['message_type']);
+    not_displayed = icon.hasClass('icon-white');
+
+    clone = $('.messages tbody tr:first').clone();
+    clone.addClass('displayed');
+    if (not_displayed) {
+      clone.hide();
+    } else {
+      clone.show();
+    }
+    clone.find('i').removeClass().addClass(icon.attr('class')).addClass('not-white').removeClass('icon-white');
+    clone.children('.message').html(payload['message']);
+    d = new Date();
+    t = (d.getTime()-d.getTimezoneOffset()*60*1000);
+    clone.children('.time').data('time', t);
+    clone.insertBefore('.messages > tbody > tr:first');
   }
 
 }).call(this); 

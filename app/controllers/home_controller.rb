@@ -16,6 +16,7 @@ class HomeController < ApplicationController
         'solenoid'      => 'icon-tint',
         'grey_water'    => 'icon-share',
         'notice'        => 'icon-envelope',
+        'access'        => 'icon-remove-circle',
     }
 
     @bps        = (@readings['bandwidth_bps']['reading']/1024).round

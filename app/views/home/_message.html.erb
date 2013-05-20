@@ -7,6 +7,6 @@
 %>
 <tr style="<%=(visible ? '' : 'display: none;')%>" class="displayed">
   <td><i class="<%=@message_icons[message['message_type']]%> <%=(visible ? 'not-white' : 'icon-white')%>"></i></td>
-  <td><%=message['message']%></td>
+  <td class="message"><%=message['message']%></td>
   <td class="time" data-time_format="d/mm @ h:MM tt" style="white-space:nowrap;"><%=message['local_time']%></td>
 </tr>

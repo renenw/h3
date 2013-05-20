@@ -137,10 +137,13 @@
 						<thead>
 							<tr><td colspan=3>
 									<i class="icon-star"></i> |
-									<i class="icon-bell"></i>
-									<i class="icon-tint"></i>
-									<i class="icon-share"></i>
-									<i class="icon-envelope"></i>
+									<%
+										@message_icons.each do |key, value|
+											%>
+												<i class="<%=value%>" id="<%=key%>"></i>
+											<%
+										end
+									%>
 							</td></tr>
 						</thead>
 						<tbody>
