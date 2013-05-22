@@ -29,7 +29,7 @@ H3::Application.routes.draw do
   get '/api/:data_store/:source/:dimension/summary' => 'api#get_summary',     :defaults => { :format => 'json' }  # get the most recent summary value for a sensor, for a dimension
   get '/api/:data_store/:dimension'                 => 'api#get_summaries',   :defaults => { :format => 'json' }  # for a dimension, retrieve all the summarised values for all sensors
   put '/api/:data_store/:source/:value'             => 'api#udp_put'                                              # push a message to the UDP server
-
+  get '/api/is_it_wet'                              => 'api#is_it_wet?'                                           # return 200 if its not going to rain, 418 if it is
 
   match 'login'   => 'sessions#new'
   match 'logout'  => 'sessions#destroy'

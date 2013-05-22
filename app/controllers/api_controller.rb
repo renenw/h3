@@ -40,6 +40,12 @@ class ApiController < ApplicationController
     end
   end
 
+  def is_it_wet?
+    reading = memcache.get_reading(params, 'rainy_day')
+    status_code = (reading['reading']==0 ? 200 : 418)
+    render :nothing => true, :status => status_code
+  end
+
   def udp_put
     if params['data_store'] == '30_camp_ground_road'
       socket = UDPSocket.new

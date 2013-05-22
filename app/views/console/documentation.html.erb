@@ -9,6 +9,8 @@
   <tr><td>GET</td><td>/api/:data_store/:source/:dimension/summary</td><td>get the most recent summary value for a sensor, for a dimension</td></tr>
   <tr><td>GET</td><td>/api/:data_store/:dimension</td><td>&nbsp;&nbsp;</td></tr>
   <tr><td>PUT</td><td>/api/:data_store/:source/:value</td><td>Push a message into the event processor sending the "value" to the source.</td></tr>
+  <tr><td>GET</td><td>/api/is_it_wet?</td><td>return 200 if its <b>not</b> going to rain (and it didn't rain a lot yesterday), 418 if it is wet</td></tr>
+
 </table>
 
 <h1>1Wire</h1>
