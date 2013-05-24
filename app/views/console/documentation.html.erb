@@ -3,13 +3,16 @@
 <table>
   <tr><td>GET&nbsp;</td><td>/api/:data_store/sources</td><td>list sources</td></tr>
   <tr><td>GET</td><td>/api/:data_store/readings</td><td>show the most recent reading / state for each source</td></tr>
+  <tr><td>GET</td><td>/api/:data_store/messages</td><td>get most recent messages (eg "alarm activated")</td></tr>
+  <tr><td>GET</td><td>/api/:data_store/is_it_wet?</td><td>return 200 if its <b>not</b> going to rain (and it didn't rain a lot yesterday), 418 if it is wet</td></tr>
   <tr><td>GET</td><td>/api/:data_store/:source/reading</td><td>for a single sensor, show the current state</td></tr>
+
   <tr><td>GET</td><td>/api/:data_store/:source/readings</td><td>show the most recent readings (50 or n <= 200) for a sensor</td></tr>
   <tr><td>GET</td><td>/api/:data_store/:source/:dimension</td><td>retrieve the last 50 (or n <= 200) summarised data points for a sensor, for a dimension</td></tr>
   <tr><td>GET</td><td>/api/:data_store/:source/:dimension/summary</td><td>get the most recent summary value for a sensor, for a dimension</td></tr>
   <tr><td>GET</td><td>/api/:data_store/:dimension</td><td>&nbsp;&nbsp;</td></tr>
   <tr><td>PUT</td><td>/api/:data_store/:source/:value</td><td>Push a message into the event processor sending the "value" to the source.</td></tr>
-  <tr><td>GET</td><td>/api/is_it_wet?</td><td>return 200 if its <b>not</b> going to rain (and it didn't rain a lot yesterday), 418 if it is wet</td></tr>
+  
 
 </table>
 
