@@ -30,12 +30,16 @@ class HomeController < ApplicationController
     @qos_class  = 'label-warning' if @qos > 2
 
     @irrigation = (@readings['rainy_day']['reading']==0)
+    @precipitation_tx = (@readings['precipitation_tx']['reading']*10.0).round/10.0
     @precipitation_t0 = (@readings['precipitation_t0']['reading']*10.0).round/10.0
     @precipitation_t1 = (@readings['precipitation_t1']['reading']*10.0).round/10.0
     @precipitation_t2 = (@readings['precipitation_t2']['reading']*10.0).round/10.0
+    @precipitation_3h = (@readings['precipitation_3h']['reading']*10.0).round/10.0
+    @precipitation_tx_icon = weather_icon(@precipitation_tx)
     @precipitation_t0_icon = weather_icon(@precipitation_t0)
     @precipitation_t1_icon = weather_icon(@precipitation_t1)
     @precipitation_t2_icon = weather_icon(@precipitation_t2)
+    @precipitation_3h_icon = weather_icon(@precipitation_3h*8.0)
 
     @type_counts = {}
 

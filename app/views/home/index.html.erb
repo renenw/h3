@@ -82,10 +82,29 @@
 					<table class="table table-striped table-hover table-condensed table-bordered">
 						<tbody>
 							<tr>
-								<td><%= image_tag("weather/64x64/#{(@irrigation ? 'sun.rays.small' : 'cloud.dark.rain')}.png", :alt => "Irrigation systems #{(@irrigation ? 'on' : 'off')}") %><%= (@irrigation ? 'On' : 'Off') %></td>
-								<td><%= image_tag(@precipitation_t0_icon) %><%=@precipitation_t0%>&nbsp;mm</td>
-								<td><%= image_tag(@precipitation_t1_icon) %><%=@precipitation_t1%>&nbsp;mm</td>
-								<td><%= image_tag(@precipitation_t2_icon) %><%=@precipitation_t2%>&nbsp;mm</td>
+								<td style="vertical-align:middle">
+									<h1><%= (@irrigation ? 'On' : 'Off') %></h1>
+								</td>
+								<td>
+									<b>- 24 hours</b><br/>
+									<%= image_tag(@precipitation_tx_icon) %><%=@precipitation_tx%>&nbsp;mm
+								</td>
+								<td>
+									<b>+ 3 hours</b><br/>
+									<%= image_tag(@precipitation_3h_icon) %>
+									<%= @precipitation_3h %>&nbsp;mm
+								</td>
+								<td>
+									<b>+ 24 hours</b><br/>
+									<%= image_tag(@precipitation_t0_icon) %>
+									<%=@precipitation_t0%>&nbsp;mm
+								</td>
+								<td>
+									<b>+ 48 hours</b><br/><%= image_tag(@precipitation_t1_icon) %>
+									<%=@precipitation_t1%>&nbsp;mm</td>
+								<td>
+									<b>+ 72 hours</b><br/><%= image_tag(@precipitation_t2_icon) %>
+									<%=@precipitation_t2%>&nbsp;mm</td>
 							</tr>
 						</tbody>
 					</table>
