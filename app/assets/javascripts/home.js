@@ -3,6 +3,23 @@
   window.Home || (window.Home = {});
 
   Home.init = function() {
+    Home.message_affordance();
+    Home.init_switches();
+  }
+
+  Home.init_switches = function() {
+    $(".switches button").click(function() {
+        e = $(this);
+        target_state = !e.hasClass('active');
+        source = e.data('source');
+        $.ajax({
+          url: '/switch/set/' + source + '/' + (target_state ? 'on' : 'off'),
+          type: 'PUT'
+        });
+    });
+  }
+
+  Home.message_affordance = function() {
     $(".messages thead i").click(function() {
     	e = $(this);
     	// visual affordance on icon

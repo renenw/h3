@@ -13,6 +13,8 @@ H3::Application.routes.draw do
   get 'sensor/gauge/:source' => 'sensors#gauge'
   get 'sensor/meter/:source' => 'sensors#meter'
 
+  put 'switch/set/:source/:state'   => 'switch#set_switch'
+
   root :to => "home#index"
 
   resources :sessions
