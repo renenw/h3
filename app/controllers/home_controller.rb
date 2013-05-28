@@ -30,11 +30,15 @@ class HomeController < ApplicationController
     @qos_class  = 'label-warning' if @qos > 2
 
     @irrigation = (@readings['rainy_day']['reading']==0)
+    @precipitation_tv = (@readings['precipitation_tv']['reading']*10.0).round/10.0
+    @precipitation_tw = (@readings['precipitation_tw']['reading']*10.0).round/10.0
     @precipitation_tx = (@readings['precipitation_tx']['reading']*10.0).round/10.0
     @precipitation_t0 = (@readings['precipitation_t0']['reading']*10.0).round/10.0
     @precipitation_t1 = (@readings['precipitation_t1']['reading']*10.0).round/10.0
     @precipitation_t2 = (@readings['precipitation_t2']['reading']*10.0).round/10.0
     @precipitation_3h = (@readings['precipitation_3h']['reading']*10.0).round/10.0
+    @precipitation_tv_icon = weather_icon(@precipitation_tv)
+    @precipitation_tw_icon = weather_icon(@precipitation_tw)
     @precipitation_tx_icon = weather_icon(@precipitation_tx)
     @precipitation_t0_icon = weather_icon(@precipitation_t0)
     @precipitation_t1_icon = weather_icon(@precipitation_t1)
@@ -46,12 +50,12 @@ class HomeController < ApplicationController
   end
 
   def weather_icon(precipitation)
-    icon = 'weather/64x64/sun.rays.small.png'
-    icon = 'weather/64x64/sun.rays.small.cloud.png'   if precipitation > 0 and precipitation <= 1
-    icon = 'weather/64x64/sun.rays.cloud.drizzle.png' if precipitation > 1 and precipitation <= 5
-    icon = 'weather/64x64/cloud.drizzle.png'          if precipitation > 5 and precipitation <= 10
-    icon = 'weather/64x64/cloud.dark.rain.png'        if precipitation > 10
-    icon
+    icon = 'sun.rays.small.png'
+    icon = 'sun.rays.small.cloud.png'   if precipitation > 0 and precipitation <= 1
+    icon = 'sun.rays.cloud.drizzle.png' if precipitation > 1 and precipitation <= 5
+    icon = 'cloud.drizzle.png'          if precipitation > 5 and precipitation <= 10
+    icon = 'cloud.dark.rain.png'        if precipitation > 10
+    "weather/64x64/#{icon}"
   end
 
 end
