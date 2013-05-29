@@ -29,6 +29,16 @@ class HomeController < ApplicationController
     @qos_class  = ''              if @qos > 1
     @qos_class  = 'label-warning' if @qos > 2
 
+    @active_solenoids = {}
+    %w(pond_ferns front_misters front front_fynbos outhouse_lawn driveway vegetable_patch jungle_gym pool_beds pool_lawn pool).each do |solenoid|
+        if (@readings[solenoid]['reading']==1)
+            @active_solenoids[solenoid] = 'active'
+        else
+            @active_solenoids[solenoid] = ''
+        end
+    end
+
+    # rainfall indicators
     @irrigation = (@readings['rainy_day']['reading']==0)
     @precipitation_tv = (@readings['precipitation_tv']['reading']*10.0).round/10.0
     @precipitation_tw = (@readings['precipitation_tw']['reading']*10.0).round/10.0

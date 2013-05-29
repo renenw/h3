@@ -21,6 +21,7 @@
 
   function process_message(payload) {
     process_alarm(payload);
+    process_alarm_message(payload);
     process_basic_readings(payload);
     process_electricity(payload);
     process_dimensions(payload);
@@ -44,6 +45,12 @@
 
   function process_access(payload) {
     if (payload["message_type"]=="access") {
+      prepend_message(payload);
+    }
+  }
+
+  function process_alarm_message(payload) {
+    if (payload["source"]=="alarm_message") {
       prepend_message(payload);
     }
   }
