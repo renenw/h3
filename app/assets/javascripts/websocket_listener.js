@@ -26,12 +26,16 @@
     process_electricity(payload);
     process_dimensions(payload);
     process_access(payload);
+    process_solenoid_message(payload);
     FieldFormatter.format_fields();
   }
 
   function process_basic_readings(payload) {
     if (payload["message_type"]=="reading") {
       $("." + payload["source"] + "_reading").html(payload["message"]);
+      if ((payload['message']==0) || (payload['message']==1)) {
+        $("button[data-source='" + payload["source"] + "']").removeClass('active').addClass((payload['message']==1 ? 'active' : ''));
+      }
     }
   }
 
@@ -51,6 +55,12 @@
 
   function process_alarm_message(payload) {
     if (payload["source"]=="alarm_message") {
+      prepend_message(payload);
+    }
+  }
+
+  function process_solenoid_message(payload) {
+    if (payload["message_type"]=="solenoid") {
       prepend_message(payload);
     }
   }
