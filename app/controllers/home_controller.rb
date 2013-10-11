@@ -32,7 +32,7 @@ class HomeController < ApplicationController
     @active_solenoids = {}
     %w(pond_ferns front_misters front front_fynbos outhouse_lawn driveway vegetable_patch jungle_gym pool_beds pool_lawn pool).each do |solenoid|
         if (@readings[solenoid]['reading']==1)
-            @active_solenoids[solenoid] = 'active'
+            @active_solenoids[solenoid] = 'active_solenoid active'
         else
             @active_solenoids[solenoid] = ''
         end

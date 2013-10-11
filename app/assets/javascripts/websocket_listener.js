@@ -34,7 +34,16 @@
     if (payload["message_type"]=="reading") {
       $("." + payload["source"] + "_reading").html(payload["message"]);
       if ((payload['message']==0) || (payload['message']==1)) {
-        $("button[data-source='" + payload["source"] + "']").removeClass('active').addClass((payload['message']==1 ? 'active' : ''));
+        e = $("button[data-source='" + payload["source"] + "']")
+        if (e.length>0) {
+          e.removeClass('active').removeClass('active_solenoid')
+          if (payload['message']==1) {
+            e.addClass('active').addClass('active_solenoid');
+            e.css('font-size', '8px');
+          } else {
+            e.css('font-size', '');
+          }
+        }
       }
     }
   }

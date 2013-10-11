@@ -50,28 +50,28 @@
 				<div class="switches">
 					    <div class="btn-toolbar">
 						    <div class="btn-group btn-group-vertical" data-toggle="buttons-checkbox">
-						    	<button class="btn btn-mini btn-warning <%=@active_solenoids['electricity_geyser']%>" data-source="electricity_geyser">geyser off</button>
-						    	<button class="btn btn-mini btn-info <%=@active_solenoids['pool']%>" data-source="pool">pool water</button>
+						    	<%= render 'solenoid', solenoid: 'electricity_geyser', description: 'geyser', colour: 'warning' %>
+						    	<%= render 'solenoid', solenoid: 'pool', description: 'pool water', colour: 'info' %>
 						    </div>
 						    <div class="btn-group btn-group-vertical" data-toggle="buttons-checkbox">
-						    	<button class="btn btn-mini btn-success <%=@active_solenoids['vegetable_patch']%>" data-source="vegetable_patch">vegetable patch</button>
-						    	<button class="btn btn-mini btn-success <%=@active_solenoids['outhouse_lawn']%>" data-source="outhouse_lawn">outhouse lawn</button>
+						    	<%= render 'solenoid', solenoid: 'vegetable_patch' %>
+						    	<%= render 'solenoid', solenoid: 'outhouse_lawn' %>
 						    </div>
 						    <div class="btn-group btn-group-vertical" data-toggle="buttons-checkbox">
-						    	<button class="btn btn-mini btn-success <%=@active_solenoids['driveway']%>" data-source="driveway">driveway</button>
-						    	<button class="btn btn-mini btn-success <%=@active_solenoids['jungle_gym']%>" data-source="jungle_gym">jungle gym</button>
+						    	<%= render 'solenoid', solenoid: 'driveway' %>
+						    	<%= render 'solenoid', solenoid: 'jungle_gym' %>
 						    </div>
 						    <div class="btn-group btn-group-vertical" data-toggle="buttons-checkbox">
-						    	<button class="btn btn-mini btn-success <%=@active_solenoids['front']%>" data-source="front">front garden</button>
-						    	<button class="btn btn-mini btn-success <%=@active_solenoids['front_fynbos']%>" data-source="front_fynbos">front fynbos</button>
+						    	<%= render 'solenoid', solenoid: 'front', description: 'front garden' %>
+						    	<%= render 'solenoid', solenoid: 'front_fynbos' %>
 						    </div>
 						    <div class="btn-group btn-group-vertical" data-toggle="buttons-checkbox">
-						    	<button class="btn btn-mini btn-success <%=@active_solenoids['pool_lawn']%>" data-source="pool_lawn">pool lawn</button>
-						    	<button class="btn btn-mini btn-success <%=@active_solenoids['pool_beds']%>" data-source="pool_beds">pool beds</button>
+						    	<%= render 'solenoid', solenoid: 'pool_lawn' %>
+						    	<%= render 'solenoid', solenoid: 'pool_beds' %>
 						    </div>
 						    <div class="btn-group btn-group-vertical" data-toggle="buttons-checkbox">
-						    	<button class="btn btn-mini btn-success <%=@active_solenoids['front_misters']%>" data-source="front_misters">ferns</button>
-						    	<button class="btn btn-mini btn-success <%=@active_solenoids['pond_ferns']%>" data-source="pond_ferns">pond ferns</button>
+						    	<%= render 'solenoid', solenoid: 'front_misters', description: 'ferns' %>
+						    	<%= render 'solenoid', solenoid: 'pond_ferns' %>
 						    </div>
 					    </div>
 				</div>

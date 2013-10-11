@@ -1,0 +1,6 @@
+<%
+  colour      ||= 'success'
+  description ||= solenoid.gsub(/_/, ' ')
+%>
+
+<button class="<%=@active_solenoids[solenoid]%> btn btn-mini btn-<%=colour%>" <%=(@active_solenoids[solenoid].blank? ? '' : "style='font-size:8px;'")%> data-source="<%=solenoid%>"><%=description%></button>
