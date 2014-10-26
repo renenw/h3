@@ -42,7 +42,11 @@ class ApiController < ApplicationController
 
   def is_it_wet?
     reading = memcache.get_reading(params, 'rainy_day')
-    status_code = (reading['reading']==0 ? 200 : 418)
+    if reading
+      status_code = (reading['reading']==0 ? 200 : 418)
+    else
+      status_code = 200
+    end
     render :nothing => true, :status => status_code
   end
 
