@@ -146,15 +146,15 @@
 									<td><span id="electricity_total_month" class="format" data-format="#"><%=@electricity_total_month.round %></span>kW</td></tr>
 							<tr>
 								<td>Pool</td>
-								<td><span id="electricity_pool_day" class="format" data-format="#"><%=(@electricity_pool_day/@electricity_total_day.to_f).round%></span>%</td>
-								<td><span id="electricity_pool_week" class="format" data-format="#"><%=(@electricity_pool_week/@electricity_total_week.to_f).round%></span>%</td>
-								<td><span id="electricity_pool_month" class="format" data-format="#"><%=(@electricity_pool_month/@electricity_total_month.to_f).round%></span>%</td>
+								<td><span id="electricity_pool_day" class="format" data-format="#"><%=(@electricity_pool_day/@electricity_total_day.to_f)*100%></span>%</td>
+								<td><span id="electricity_pool_week" class="format" data-format="#"><%=(@electricity_pool_week/@electricity_total_week.to_f)*100%></span>%</td>
+								<td><span id="electricity_pool_month" class="format" data-format="#"><%=(@electricity_pool_month/@electricity_total_month.to_f)*100%></span>%</td>
 							</tr>
 							<tr>
 								<td>Geyser</td>
-								<td><span id="electricity_geyser_day" class="format" data-format="#"><%=(@electricity_geyser_day/@electricity_total_day.to_f).round%></span>%</td>
-								<td><span id="electricity_geyser_week" class="format" data-format="#"><%=(@electricity_geyser_week/@electricity_total_week.to_f).round%></span>%</td>
-								<td><span id="electricity_geyser_month" class="format" data-format="#"><%=(@electricity_geyser_month/@electricity_total_month.to_f).round%></span>%</td>
+								<td><span id="electricity_geyser_day" class="format" data-format="#"><%=(@electricity_geyser_day/@electricity_total_day.to_f)*100%></span>%</td>
+								<td><span id="electricity_geyser_week" class="format" data-format="#"><%=(@electricity_geyser_week/@electricity_total_week.to_f)*100%></span>%</td>
+								<td><span id="electricity_geyser_month" class="format" data-format="#"><%=(@electricity_geyser_month/@electricity_total_month.to_f)*100%></span>%</td>
 							</tr>
 						</tbody>
 					</table>
