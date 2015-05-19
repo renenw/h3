@@ -10,6 +10,14 @@ class HomeController < ApplicationController
     @electricity_total_week   = memcache.get_summary('data_store' => params['data_store'], 'source' => 'electricity_total', 'dimension' => 'week' )['electricity_total']['values']['sum']/1000
     @electricity_total_month  = memcache.get_summary('data_store' => params['data_store'], 'source' => 'electricity_total', 'dimension' => 'month' )['electricity_total']['values']['sum']/1000
 
+    @electricity_pool_day     = memcache.get_summary('data_store' => params['data_store'], 'source' => 'electricity_pool', 'dimension' => 'day' )['electricity_pool']['values']['sum']/1000
+    @electricity_pool_week    = memcache.get_summary('data_store' => params['data_store'], 'source' => 'electricity_pool', 'dimension' => 'week' )['electricity_pool']['values']['sum']/1000
+    @electricity_pool_month   = memcache.get_summary('data_store' => params['data_store'], 'source' => 'electricity_pool', 'dimension' => 'month' )['electricity_pool']['values']['sum']/1000
+
+    @electricity_geyser_day    = memcache.get_summary('data_store' => params['data_store'], 'source' => 'electricity_geyser', 'dimension' => 'day' )['electricity_geyser']['values']['sum']/1000
+    @electricity_geyser_week   = memcache.get_summary('data_store' => params['data_store'], 'source' => 'electricity_geyser', 'dimension' => 'week' )['electricity_geyser']['values']['sum']/1000
+    @electricity_geyser_month  = memcache.get_summary('data_store' => params['data_store'], 'source' => 'electricity_geyser', 'dimension' => 'month' )['electricity_geyser']['values']['sum']/1000
+
     @messages           = memcache.get_array("messages", params)
     @message_icons      = {
         'alarm'         => 'icon-bell',
