@@ -50,6 +50,16 @@ class ApiController < ApplicationController
     render :nothing => true, :status => status_code
   end
 
+  def is_the_pool_deep_enough?
+    reading = memcache.get_reading(params, 'pool_deep_enough')
+    if reading
+      status_code = (reading['reading']==1 ? 200 : 418)
+    else
+      status_code = 200
+    end
+    render :nothing => true, :status => status_code
+  end
+
   def udp_put
     if params['data_store'] == '30_camp_ground_road'
       socket = UDPSocket.new
