@@ -1,15 +1,17 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.3'
+ruby "2.2.2"
+
+gem 'rails', '4.2.1'
 gem 'mysql2'
 
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.1.5'
-  gem 'coffee-rails', '~> 3.1.1'
-  gem 'uglifier', '>= 1.0.3'
+  gem 'sass-rails'
+  gem 'coffee-rails'
+  gem 'uglifier'
   gem 'therubyracer', :platform => :ruby
 end
 
@@ -36,3 +38,6 @@ group :development do
   gem "bullet"
   gem 'rack-mini-profiler'
 end
+
+gem 'foreman'
+gem 'passenger'

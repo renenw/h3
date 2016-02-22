@@ -6,7 +6,7 @@ H3::Application.routes.draw do
   get "console/documentation"
   get "console/anomalies"    => 'console#readings', :type => 'anomalies'
   get "console/failures"     => 'console#readings', :type => 'failures'
-  match 'console/log/:guid'  => 'console#log'
+  get 'console/log/:guid'  => 'console#log'
    
   get "home/index"
 
@@ -33,8 +33,8 @@ H3::Application.routes.draw do
   get '/api/:data_store/:dimension'                 => 'api#get_summaries',   :defaults => { :format => 'json' }  # for a dimension, retrieve all the summarised values for all sensors
   put '/api/:data_store/:source/:value'             => 'api#udp_put'                                              # push a message to the UDP server
 
-  match 'login'   => 'sessions#new'
-  match 'logout'  => 'sessions#destroy'
+  get 'login'   => 'sessions#new'
+  get 'logout'  => 'sessions#destroy'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
