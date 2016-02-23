@@ -25,8 +25,7 @@ H3::Application.routes.draw do
   get '/api/:data_store/sources'                    => 'api#get_sensor_list', :defaults => { :format => 'json' }  # list sources
   get '/api/:data_store/readings'                   => 'api#get_readings',    :defaults => { :format => 'json' }  # show the most recent reading / state for each source
   get '/api/:data_store/messages'                   => 'api#get_messages',    :defaults => { :format => 'json' }  # get most recent messages (eg "alarm activated")
-  get '/api/:data_store/is_it_wet'                  => 'api#is_it_wet?'                                           # return 200 if its not going to rain, 418 if it is
-  get '/api/:data_store/is_the_pool_deep_enough'    => 'api#is_the_pool_deep_enough?'                             # return 200 if its deep enough, 418 if its not
+  get '/api/:data_store/may_switch/:switch'         => 'api#may_switch?'                                           # return 200 if its not going to rain, 418 if it is
   get '/api/:data_store/:source/reading'            => 'api#get_readings',    :defaults => { :format => 'json' }  # for a single sensor, show the current state
   get '/api/:data_store/:source/readings'           => 'api#get_history',     :defaults => { :format => 'json' }  # show the most recent readings (50) for a sensor
   get '/api/:data_store/:source/:dimension'         => 'api#get_summaries',   :defaults => { :format => 'json' }  # retrieve the last 50 summarised data points for a sensor, for a dimension

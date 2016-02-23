@@ -40,24 +40,9 @@ class ApiController < ApplicationController
     end
   end
 
-  def is_it_wet?
-    reading = memcache.get_reading(params, 'rainy_day')
-    if reading
-      status_code = (reading['reading']==0 ? 200 : 418)
-    else
-      status_code = 200
-    end
-    render :nothing => true, :status => status_code
-  end
-
-  def is_the_pool_deep_enough?
-    reading = memcache.get_reading(params, 'pool_deep_enough')
-    if reading
-      status_code = (reading['reading']==1 ? 200 : 418)
-    else
-      status_code = 200
-    end
-    render :nothing => true, :status => status_code
+  def may_switch?
+    reading     = memcache.get_reading(params, params[:switch])
+    render :nothing => true, :status => (reading && reading['reading']==0 ? 200 :418)
   end
 
   def udp_put
